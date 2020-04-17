@@ -2,20 +2,20 @@ package nsgl.language;
 
 import java.io.IOException;
 
-import nsgl.generic.array.DynArray;
+import nsgl.generic.array.Vector;
 import nsgl.exception.IO;
 
 public abstract class Parser{
 	protected int pos;
 	protected Token token;
-	protected DynArray<Token> tokens;
+	protected Vector<Token> tokens;
 	
 	char rule='$';
 	
 	public char rule(){ return rule; }
 	public void setRule(char rule) { this.rule = rule; }
 
-	public Typed analize( DynArray<Token> tokens ) throws IOException{
+	public Typed analize( Vector<Token> tokens ) throws IOException{
 		pos = 0;
 		this.tokens = tokens;
 		next();

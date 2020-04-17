@@ -1,13 +1,13 @@
 package nsgl.language;
 
-import nsgl.generic.array.DynArray;
+import nsgl.generic.array.Vector;
 
 public class ParserRule extends Typed{
 	protected int min = 1;
 	protected int max = 1;
-	protected DynArray<Token> syntagme;
+	protected Vector<Token> syntagme;
 	
-	public ParserRule(char name, DynArray<Token> syntagme, int min, int max ) {
+	public ParserRule(char name, Vector<Token> syntagme, int min, int max ) {
 		super(name);
 		this.syntagme = syntagme;
 		this.min = min;

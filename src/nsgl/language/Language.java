@@ -1,6 +1,6 @@
 package nsgl.language;
 
-import nsgl.generic.array.DynArray;
+import nsgl.generic.array.Vector;
 
 public class Language<T>{
 	protected Lexer lexer;
@@ -15,7 +15,7 @@ public class Language<T>{
 	
 	
 	public T process( String input ) throws Exception{
-		DynArray<Token> tokens = lexer.analize(input);
+		Vector<Token> tokens = lexer.analize(input);
 		Typed r = parser.analize(tokens);
 		return meaner.apply(r);				
 	}

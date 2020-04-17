@@ -1,6 +1,6 @@
 package nsgl.object.parser;
 
-import nsgl.generic.array.DynArray;
+import nsgl.generic.array.Vector;
 import nsgl.language.LexemeSet;
 import nsgl.language.Meaner;
 import nsgl.language.Token;
@@ -16,8 +16,8 @@ public class ObjectMeaner implements Meaner<Object>{
 	public Object apply(Typed obj) throws Exception {
 		if( obj instanceof Token ) return lexemes.map((Token)obj);
 		@SuppressWarnings("unchecked")
-		TypedValue<DynArray<Typed>> tv = (TypedValue<DynArray<Typed>>)obj;
-		DynArray<Object> v = new DynArray<Object>();
+		TypedValue<Vector<Typed>> tv = (TypedValue<Vector<Typed>>)obj;
+		Vector<Object> v = new Vector<Object>();
 		for( Typed t:tv.value() ) v.add(apply(t));
 		return v;
 	}	

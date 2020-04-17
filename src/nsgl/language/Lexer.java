@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import nsgl.generic.array.DynArray;
+import nsgl.generic.array.Vector;
 import nsgl.exception.IO;
 import nsgl.exception.ProcessException;
 
@@ -12,9 +12,9 @@ public class Lexer extends LexemeSet{
 	public Lexer(){}
 	public Lexer( LexemeSet source ){ for( Lexeme l:source.lexemes ) this.add(l); }
 	
-	protected DynArray<Token> process( Pattern pattern, String input, int start ){
+	protected Vector<Token> process( Pattern pattern, String input, int start ){
 		Matcher matcher = pattern.matcher(input);
-		DynArray<Token> tokens = new DynArray<Token>();
+		Vector<Token> tokens = new Vector<Token>();
 		if( matcher.find(start) ) {
 			tokens.add(get(matcher.group(),matcher.start()));
 			while( matcher.find() ) tokens.add(get(matcher.group(),matcher.start()));
@@ -22,13 +22,13 @@ public class Lexer extends LexemeSet{
 		return tokens;
 	}
 	
-	public DynArray<Token> process( String input, int start ){ return process( pattern(), input, start ); }
+	public Vector<Token> process( String input, int start ){ return process( pattern(), input, start ); }
 
-	public DynArray<Token> process( String input ){ return process( pattern(), input, 0 ); }
+	public Vector<Token> process( String input ){ return process( pattern(), input, 0 ); }
 
-	public DynArray<Token> analize( String input, int start ) throws IOException{
-		DynArray<Token> tokens = process( pattern(), input, start );
-		DynArray<Object> exceptions = new DynArray<Object>();
+	public Vector<Token> analize( String input, int start ) throws IOException{
+		Vector<Token> tokens = process( pattern(), input, start );
+		Vector<Object> exceptions = new Vector<Object>();
 		for( Token t:tokens ) {
 			if( t.pos()!=start ) exceptions.add(new Object[]{IO.UNEXPECTED, input.substring(start, t.pos()), start});
 			start = t.pos()+t.length();
@@ -40,13 +40,13 @@ public class Lexer extends LexemeSet{
 		throw IO.exception(e);
 	}
 	
-	public DynArray<Token> analize( String input ) throws IOException{ return analize( input, 0 );	}
+	public Vector<Token> analize( String input ) throws IOException{ return analize( input, 0 );	}
 	
-	public static DynArray<Token> remove(DynArray<Token> tokens, String toremove ){
+	public static Vector<Token> remove(Vector<Token> tokens, String toremove ){
 		for( int i=tokens.size()-1; i>=0; i-- )	if( toremove.indexOf(tokens.get(i).type()) >= 0 ) tokens.remove(i);
 		return tokens;
 	}
 	
-	public static DynArray<Token> remove_space(DynArray<Token> tokens ){ return remove(tokens, " "); }
+	public static Vector<Token> remove_space(Vector<Token> tokens ){ return remove(tokens, " "); }
 	
 }

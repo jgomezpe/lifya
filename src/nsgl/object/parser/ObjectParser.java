@@ -2,7 +2,7 @@ package nsgl.object.parser;
 
 import java.io.IOException;
 
-import nsgl.generic.array.DynArray;
+import nsgl.generic.array.Vector;
 import nsgl.exception.IO;
 import nsgl.language.Lexer;
 import nsgl.language.Parser;
@@ -13,7 +13,7 @@ import nsgl.language.TypedValue;
 public class ObjectParser extends Parser{
 	protected char S = '#'; 
 	@Override
-	public Typed analize( DynArray<Token> tokens ) throws IOException{
+	public Typed analize( Vector<Token> tokens ) throws IOException{
 		tokens = Lexer.remove_space(tokens);
 		return super.analize(tokens);
 	}
@@ -21,7 +21,7 @@ public class ObjectParser extends Parser{
 	@Override
 	public Typed process() throws IOException{
 		if( token.type()==S && token.value().charAt(0)=='[' ) {
-			DynArray<Typed> v = new DynArray<Typed>();
+			Vector<Typed> v = new Vector<Typed>();
 			next();
 			while( token.type() != S || token.value().charAt(0)!=']' ){
 				if(token.type() == S && token.value().charAt(0)==',' ) throw IO.exception(IO.UNEXPECTED, ',', token.pos());
@@ -29,7 +29,7 @@ public class ObjectParser extends Parser{
 				if(next().type() == S && token.value().charAt(0)==',' && next().type() == S && token.value().charAt(0)!='[') 
 					throw IO.exception(IO.UNEXPECTED, token.value(), token.pos());
 			}
-			return new TypedValue<DynArray<Typed>>('O', v);
+			return new TypedValue<Vector<Typed>>('O', v);
 		}
 		return token; 
 	}	
