@@ -7,7 +7,7 @@ public class ParserRule extends Typed{
 	protected int max = 1;
 	protected Vector<Token> syntagme;
 	
-	public ParserRule(char name, Vector<Token> syntagme, int min, int max ) {
+	public ParserRule(String name, Vector<Token> syntagme, int min, int max ) {
 		super(name);
 		this.syntagme = syntagme;
 		this.min = min;

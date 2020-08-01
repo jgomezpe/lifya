@@ -1,5 +1,7 @@
 package nsgl.language.generalized;
 
+import java.io.IOException;
+
 import nsgl.language.Language;
 import nsgl.language.Lexer;
 import nsgl.language.Meaner;
@@ -12,7 +14,7 @@ public class GeneralizedLanguage<T,S> extends Language<T>{
 		this.encoder = encoder;
 	}
 	
-	public T process( Iterable<S> reader ) throws Exception{
+	public T process( Iterable<S> reader ) throws IOException{
 		StringBuilder sb = new StringBuilder();
 		for(S c:reader) sb.append(encoder.encode(c));
 		return process( sb.toString() ); 

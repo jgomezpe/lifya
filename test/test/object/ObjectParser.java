@@ -1,9 +1,8 @@
-package nsgl.object.parser;
+package test.object;
 
 import java.io.IOException;
 
 import nsgl.generic.array.Vector;
-import nsgl.exception.IO;
 import nsgl.language.Lexer;
 import nsgl.language.Parser;
 import nsgl.language.Token;
@@ -11,7 +10,6 @@ import nsgl.language.Typed;
 import nsgl.language.TypedValue;
 
 public class ObjectParser extends Parser{
-	protected char S = '#'; 
 	@Override
 	public Typed analize( Vector<Token> tokens ) throws IOException{
 		tokens = Lexer.remove_space(tokens);
@@ -20,16 +18,21 @@ public class ObjectParser extends Parser{
 	
 	@Override
 	public Typed process() throws IOException{
-		if( token.type()==S && token.value().charAt(0)=='[' ) {
+		if( check_symbol('[') ) {
 			Vector<Typed> v = new Vector<Typed>();
 			next();
-			while( token.type() != S || token.value().charAt(0)!=']' ){
-				if(token.type() == S && token.value().charAt(0)==',' ) throw IO.exception(IO.UNEXPECTED, ',', token.pos());
+			while( !check_symbol(']') ){
+				if(check_symbol(',')) throw token.exception("·Unexpected· ,");
 				v.add(process());
-				if(next().type() == S && token.value().charAt(0)==',' && next().type() == S && token.value().charAt(0)!='[') 
-					throw IO.exception(IO.UNEXPECTED, token.value(), token.pos());
+				next();
+				if(check_symbol(',')) {
+				    next();
+				    if(check_symbol(']')) throw token.exception("·Unexpected· ]");
+				}else {
+				    if(!check_symbol(']')) throw token.exception("·Unexpected· ]");
+				}
 			}
-			return new TypedValue<Vector<Typed>>('O', v);
+			return new TypedValue<Vector<Typed>>("Object", v);
 		}
 		return token; 
 	}	

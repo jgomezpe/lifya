@@ -1,5 +1,8 @@
 package nsgl.language;
 
+import java.io.IOException;
+
+import nsgl.character.CharacterSequence;
 import nsgl.generic.array.Vector;
 
 public class Language<T>{
@@ -14,7 +17,11 @@ public class Language<T>{
 	}
 	
 	
-	public T process( String input ) throws Exception{
+	public T process( String input ) throws IOException{
+	    return process( new CharacterSequence(input));
+	}
+	
+	public T process(CharacterSequence input ) throws IOException{
 		Vector<Token> tokens = lexer.analize(input);
 		Typed r = parser.analize(tokens);
 		return meaner.apply(r);				

@@ -3,7 +3,7 @@ package nsgl.language;
 public class TypedValue<T> extends Typed{
 	protected T value;
 	
-	public TypedValue( char type, T value ){
+	public TypedValue( String type, T value ){
 		super(type);
 		this.value = value;
 	}

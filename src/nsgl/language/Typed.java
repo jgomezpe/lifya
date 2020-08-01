@@ -1,11 +1,11 @@
 package nsgl.language;
 
 public class Typed {
-	protected char type;
+	protected String type;
 	
-	public Typed( char type ){ this.type = type; }
+	public Typed( String type ){ this.type = type; }
 	
-	public char type(){ return type; }
+	public String type(){ return type; }
 	
-	public void setType( char type ){ this.type = type; }
+	public void setType( String type ){ this.type = type; }
 }
