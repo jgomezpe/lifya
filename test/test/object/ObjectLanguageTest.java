@@ -26,9 +26,9 @@ public class ObjectLanguageTest {
 	}
 	
 	public static void main( String[] args ) {
-	    //String txt = "123.45e-2,  \n ['A',\"Dummy \\n Text\"],2345";
+	    String txt = "123.45e-2,  \n ['A',\"Dummy \\n Text\"],2345";
 	    //String txt = "123.45e-2<  \n ['A'>,\"Dummy \\n Text\"],2345"; // With Lexer errors
-	    String txt = "['A' \"Dummy \\n Text\"],2345"; // With Grammar errors
+	    //String txt = "['A' \"Dummy \\n Text\"],2345"; // With Grammar errors
 	    try {
 		Vector<Token> tokens = lexer(txt);
 		for( Token t:tokens ) System.out.println(t);

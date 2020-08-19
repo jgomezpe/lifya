@@ -11,5 +11,9 @@ public class Symbol extends Regex{
 	public Symbol(String symbols, String type){ super("["+symbols+"]", type ); }
 
 	@Override
-	protected Object instance(CharacterSequence input, String matched) throws IOException { return matched.charAt(0); }
+	public Object instance(CharacterSequence input, String matched) throws IOException {
+	    String m = match(new CharacterSequence(matched));
+	    if( m!=null ) return matched.charAt(0);
+	    throw input.exception("·Invalid "+TAG+"· ", 0);
+	}
 }
