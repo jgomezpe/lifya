@@ -12,7 +12,7 @@
 * @version 1.0
 */
 
-/////// Lifya.js ////////////
+/////// Lyfia.js ////////////
 class Source{   
     constructor(input, id) {
         this.id = id || 'noname'

@@ -2,7 +2,8 @@
 *
 * lifya_wrap.js
 * <P>Java Script for language processing.</P>
-* <P>Includes base64.js and kompari.js.</P>
+* <P> Includes base64.js and kompari.js. </P>
+*
 * Copyright (c) 2021 by Jonatan Gomez-Perdomo. <br>
 * All rights reserved. See <A HREF="https://github.com/jgomezpe/lifya">License</A>. <br>
 *
@@ -230,7 +231,7 @@ Base64 ={
     }
 }
 
-/////// Lifya.js ////////////
+/////// Lyfia.js ////////////
 class Source{   
     constructor(input, id) {
         this.id = id || 'noname'
