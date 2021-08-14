@@ -23,7 +23,7 @@ Java/Javascript components for (programming) language processing for the numtsen
 &nbsp;Javascript ready to use: <A HREF="https://numtseng.com/modules/lifya.js">https://numtseng.com/modules/lifya.js</A>, and 
  <A HREF="https://numtseng.com/modules/lifya_wrap.js">https://numtseng.com/modules/lifya_wrap.js</A>
 
-&nbsp;Java/Javascript source code: <A HREF="https://github.com/jgomezpe/kompari/">https://github.com/jgomezpe/lifya/</A>
+&nbsp;Java/Javascript source code: <A HREF="https://github.com/jgomezpe/lifya/">https://github.com/jgomezpe/lifya/</A>
 
 &nbsp;Java API documentation: <A HREF="https://numtseng.com/api/lifya/java/">https://numtseng.com/api/lifya/java/</A>
 
