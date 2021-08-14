@@ -91,7 +91,7 @@ public class ArrayStringifier {
 	
 	public String apply(Object obj) {
 		if( obj.getClass().isArray() ) return apply(obj, 0, java.lang.reflect.Array.getLength(obj));
-		if( obj instanceof Array ) return apply(((Array<?>)obj).buffer, 0, ((Array<?>)obj).size);
+		if( obj instanceof Array ) return apply(((Array<?>)obj).buffer, 0, ((Array<?>)obj).size());
 		return obj.toString();
 	}
 }

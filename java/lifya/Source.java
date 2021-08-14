@@ -8,7 +8,7 @@ import speco.object.Named;
 public class Source extends Named{
     protected String input;
     protected Array<Integer> rows = new Array<Integer>();
-    protected SortedSearch search = new SortedSearch(new L2HOrder());
+    protected SortedSearch<Integer> search = new SortedSearch<Integer>(new L2HOrder());
     public Source(String input) {
 	this("noname", input);
     }
