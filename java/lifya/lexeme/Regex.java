@@ -65,6 +65,7 @@ public abstract class Regex<T> implements Lexeme<T>{
 	
 	/**
 	 * Creates a Recovering method for objects that satisfy the given regular expression
+	 * @param type Tag/Id for the Regular expression
 	 * @param regex Regular expression used for recovering the object
 	 */
 	public Regex( String type, String regex ) {

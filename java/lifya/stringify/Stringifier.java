@@ -66,8 +66,9 @@ public class Stringifier {
     /**
      * Stringifies a portion of an array
      * @param array Array to be stringified
-     * @param start Initial position of the portion of the array to be stringified
-     * @param end Final position (not included) of the portion of the array to be stringified 
+     * @param OPEN Opening character in the stringified version of the array
+     * @param CLOSE Closing character in the stringified version of the array 
+     * @param SEPARATOR Elements separating character in the stringified version of the array 
      * @return An stringified version of the portion of the array
      */
     public static String apply(Object array, char OPEN, char CLOSE, char SEPARATOR) {
