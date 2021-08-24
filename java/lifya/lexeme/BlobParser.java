@@ -119,7 +119,7 @@ public class BlobParser implements Lexeme<byte[]>{
 	}
 
 	/**
-	 * Determines if the lexeme can star with the given character
+	 * Determines if the lexeme can start with the given character
 	 * @param c Character to analyze
 	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
 	 */

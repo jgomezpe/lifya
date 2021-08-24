@@ -67,7 +67,7 @@ public class NumberParser implements Lexeme<Number>{
 	public static boolean issign(char c){ return ('-'==c || c=='+'); }
 
 	/**
-	 * Determines if the lexeme can star with the given character (a digit or '+', '-')
+	 * Determines if the lexeme can start with the given character (a digit or '+', '-')
 	 * @param c Character to analyze
 	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
 	 */

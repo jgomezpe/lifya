@@ -70,7 +70,7 @@ public class Space implements Lexeme<String>{
 	}
 
 	/**
-	 * Determines if the lexeme can star with the given character (' ', '\n', '\r', and '\t')
+	 * Determines if the lexeme can start with the given character (' ', '\n', '\r', and '\t')
 	 * @param c Character to analyze
 	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
 	 */

@@ -73,7 +73,7 @@ public class StringParser implements Lexeme<String>{
 	public StringParser(char quotation) { this.quotation = quotation; }
 
 	/**
-	 * Determines if the lexeme can star with the given character (quotation character)
+	 * Determines if the lexeme can start with the given character (quotation character)
 	 * @param c Character to analyze
 	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
 	 */

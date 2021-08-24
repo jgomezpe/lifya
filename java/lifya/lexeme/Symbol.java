@@ -88,7 +88,7 @@ public class Symbol implements Lexeme<Character>{
 	}
 	
 	/**
-	 * Determines if the symbol lexeme can star with the given character (a character in the set)
+	 * Determines if the symbol lexeme can start with the given character (a character in the set)
 	 * @param c Character to analyze
 	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
 	 */

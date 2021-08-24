@@ -240,7 +240,7 @@ class Read {
  */
 class Lexeme extends Read{
     /**
-     * Determines if the lexeme can star with the given character
+     * Determines if the lexeme can start with the given character
      * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */
@@ -308,7 +308,7 @@ class Space extends Lexeme{
     }
 
     /**
-     * Determines if the lexeme can star with the given character (' ', '\n', '\r', and '\t')
+     * Determines if the lexeme can start with the given character (' ', '\n', '\r', and '\t')
      * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */
@@ -354,7 +354,7 @@ class Symbol extends Lexeme{
     }
     
     /**
-     * Determines if the symbol lexeme can star with the given character (a character in the set)
+     * Determines if the symbol lexeme can start with the given character (a character in the set)
      * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */
@@ -403,7 +403,7 @@ class ID extends Lexeme{
     }
 
     /**
-     * Determines if the lexeme can star with the given character (a letter or '_')
+     * Determines if the lexeme can start with the given character (a letter or '_')
      * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */
@@ -444,7 +444,7 @@ class Words extends Lexeme{
     }
 
     /**
-     * Determines if the set of words lexeme can star with the given character (a character in the set)
+     * Determines if the set of words lexeme can start with the given character (a character in the set)
      * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */
@@ -477,7 +477,7 @@ class NumberParser extends Lexeme{
     isSign(c){ return ('-'==c || c=='+') }
 
     /**
-     * Determines if the lexeme can star with the given character (a digit or '+', '-')
+     * Determines if the lexeme can start with the given character (a digit or '+', '-')
      * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */
@@ -546,7 +546,7 @@ class StringParser extends Lexeme{
     }
 
     /**
-     * Determines if the lexeme can star with the given character (quotation character)
+     * Determines if the lexeme can start with the given character (quotation character)
      * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */
@@ -668,7 +668,7 @@ class BlobParser extends Lexeme{
     }
 
     /**
-     * Determines if the lexeme can star with the given character
+     * Determines if the lexeme can start with the given character
      * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */

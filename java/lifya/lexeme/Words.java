@@ -79,7 +79,7 @@ public class Words implements Lexeme<String>{
 	}
 
 	/**
-	 * Determines if the set of words lexeme can star with the given character (a character in the set)
+	 * Determines if the set of words lexeme can start with the given character (a character in the set)
 	 * @param c Character to analyze
 	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
 	 */

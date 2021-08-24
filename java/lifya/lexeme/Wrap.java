@@ -72,7 +72,7 @@ public class Wrap implements Lexeme<Object>{
 	public Token match(Source input, int start, int end) { return inner.match(input, start, end); }
 
 	/**
-	 * Determines if the lexeme can star with the given character (a character in the set)
+	 * Determines if the lexeme can start with the given character (a character in the set)
 	 * @param c Character to analyze
 	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
 	 */

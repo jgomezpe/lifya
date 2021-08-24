@@ -68,7 +68,7 @@ public class ID<T> implements Lexeme<T>{
 	}
 
 	/**
-	 * Determines if the lexeme can star with the given character (a letter or '_')
+	 * Determines if the lexeme can start with the given character (a letter or '_')
 	 * @param c Character to analyze
 	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
 	 */
