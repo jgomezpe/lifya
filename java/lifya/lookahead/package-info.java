@@ -1,4 +1,6 @@
 /**
+ * <p>Look a head (LL1) syntactic lexer and parser.</p>
+ *
  * <p>Copyright: Copyright (c) 2019</p>
  *
  * <h3>License</h3>
@@ -36,28 +38,4 @@
  * (E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A> )
  * @version 1.0
  */
-package lifya.lexeme;
-
-import lifya.Token;
-
-/**
- * <p>Title: IntRecover</p>
- *
- * <p>Description: Parse (Load from a String) an Integer</p>
- *
- */
-public class IntegerParser extends lifya.lexeme.NumberParser{
-    public static final String TAG = "int";
-    public String type() { return TAG; }
-	
-    public Token match(String txt, int start){
-	Token t = super.match(txt, start);
-	if(t.type().equals(type())) {
-	    if( !(t.value() instanceof Integer) ){
-		t.type(Token.ERROR);
-		t.value(type());
-	    }
-	}
-	return t;
-    }
-}
+package lifya.lookahead;

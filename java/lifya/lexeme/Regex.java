@@ -45,10 +45,10 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: RegexRecover</p>
+ * <p>Title: Regex</p>
  *
- * <p>Description: Abstract class for recovering an object that satisfies a regular expression</p>
- *
+ * <p>Description: Abstract class for parsing an object that satisfies a regular expression</p>
+ * @param <T> Type of objects being parsed
  */
 public abstract class Regex<T> implements Lexeme<T>{
 	/**
@@ -73,30 +73,57 @@ public abstract class Regex<T> implements Lexeme<T>{
 		this.regex = regex;
 		pattern = Pattern.compile("^("+regex+")");		
 	}
-	
+
+	/**
+	 * Gets the type of regex lexema
+	 * @return Type of regex lexema
+	 */
 	@Override
 	public String type() { return type; }
-	
+
 	/**
 	 * Gets the regular expression used for recovering the object
 	 * @return Regular expression used for recovering the object
 	 */
 	public String regex(){ return regex; }
-	
+
+	/**
+	 * Gets a String with the escape characters used by regular expressions
+	 * @return String with the escape characters used by regular expressions
+	 */
 	public static String escapechars() { return "<>()[]{}\\^-=$!|?*+."; }
+
+	/**
+	 * Determines if a character is a escape character used by regular expressions
+	 * @param c Character to analyze
+	 * @return <i>true</i> if the character is a escape character used by regular expressions, <i>false</i> otherwise.
+	 */
 	public static boolean escapechar(char c) { return escapechars().indexOf(c)>=0; }
+	
+	/**
+	 * Encodes a character to its regex equivalent 
+	 * @param c Character to encode
+	 * @return A regex equivalent of the given character
+	 */
 	public static String encode(char c) {
-	    if(escapechar(c)) return "\\"+c;
-	    return ""+c;
+		if(escapechar(c)) return "\\"+c;
+		return ""+c;
 	}
 
 	protected abstract T object(String str);
 	
+	/**
+	 * Creates a token with the regex type
+	 * @param input Input source from which the token was built
+	 * @param start Starting position of the token in the input source
+	 * @param end Ending position (not included) of the token in the input source
+	 * @return Integer token
+	 */
 	@Override
 	public Token match(Source input, int start, int end){
-	    String sub_input = input.substring(start, end);
-	    Matcher matcher = pattern.matcher(sub_input);
-	    if( matcher.find() && matcher.start()==0 ) return token(input, start, start+matcher.end(), object(matcher.group()));
-	    return error(input,start,start+1); 
+		String sub_input = input.substring(start, end);
+		Matcher matcher = pattern.matcher(sub_input);
+		if( matcher.find() && matcher.start()==0 ) return token(input, start, start+matcher.end(), object(matcher.group()));
+		return error(input,start,start+1); 
 	}
 }

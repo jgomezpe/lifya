@@ -65,6 +65,6 @@ public interface Stringifyable {
 	 * @return An InputStream for the object's Stringified version
 	 */
 	default InputStream is() { 
-	    return new ByteArrayInputStream(stringify().getBytes(Charset.forName(CHARSET))); 
+		return new ByteArrayInputStream(stringify().getBytes(Charset.forName(CHARSET))); 
 	}
 }

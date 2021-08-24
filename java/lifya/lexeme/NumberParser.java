@@ -42,48 +42,72 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: RealRecover</p>
+ * <p>Title: NumberParser</p>
  *
- * <p>Description: Parse (Load from a String) a real number (Double)</p>
+ * <p>Description: Parses numbers (integer or real)</p>
  *
  */
 public class NumberParser implements Lexeme<Number>{
-    public static final String TAG = "number";
+	/**
+	 * Number lexema type TAG
+	 */
+	public static final String TAG = "number";
+	
+	/**
+	 * Gets the type of number lexema
+	 * @return Type of number lexema
+	 */
 	public String type() { return TAG; }
 	
+	/**
+	 * Determines if the character is a '+' or '-'
+	 * @param c Character to analyze 
+	 * @return <i>true</i> if the character is a '+' or '-', <i>false</i> otherwise.
+	 */
 	public static boolean issign(char c){ return ('-'==c || c=='+'); }
 
+	/**
+	 * Determines if the lexeme can star with the given character (a digit or '+', '-')
+	 * @param c Character to analyze
+	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+	 */
+	@Override
 	public boolean startsWith(char c){ return issign(c) || Character.isDigit(c); }
 
-	public Token match(Source txt, int start, int end){
-		if(!this.startsWith(txt.get(start)))
-		    return error(txt, start, start);
+	/**
+	 * Creates a token with the number type
+	 * @param input Input source from which the token was built
+	 * @param start Starting position of the token in the input source
+	 * @param end Ending position (not included) of the token in the input source
+	 * @return Number token
+	 */
+	@Override
+	public Token match(Source input, int start, int end){
+		if(!this.startsWith(input.get(start))) return error(input, start, start);
 		int n = end;
 		end=start+1;
-		while(end<n && Character.isDigit(txt.get(end))) end++;
-		if(end==n) 
-		    return token(txt, start, end, Integer.parseInt(txt.substring(start,end)));
+		while(end<n && Character.isDigit(input.get(end))) end++;
+		if(end==n) return token(input, start, end, Integer.parseInt(input.substring(start,end)));
 		boolean integer = true;
-		if(txt.get(end)=='.'){
-		    integer = false;
+		if(input.get(end)=='.'){
+			integer = false;
 			end++;
 			int s=end;
-			while(end<n && Character.isDigit(txt.get(end))) end++;
-			if(end==n) 
-			    return token(txt, start, end, Double.parseDouble(txt.substring(start,end)));
-			if(end==s) return error(txt, start, end);
+			while(end<n && Character.isDigit(input.get(end))) end++;
+			if(end==n) return token(input, start, end, Double.parseDouble(input.substring(start,end)));
+			if(end==s) return error(input, start, end);
 		}
-		if(txt.get(end)=='E' || txt.get(end)=='e'){
-		    integer = false;
+		if(input.get(end)=='E' || input.get(end)=='e'){
+			integer = false;
 			end++;
-			if(end==n) return error(txt, start, end);
-			if(issign(txt.get(end))) end++;
-			if(end==n) return error(txt, start, end);
+			if(end==n) return error(input, start, end);
+			if(issign(input.get(end))) end++;
+			if(end==n) return error(input, start, end);
 			int s = end;
-			while(end<n && Character.isDigit(txt.get(end))) end++;
-			if(end==s) return error(txt, start, end);
+			while(end<n && Character.isDigit(input.get(end))) end++;
+			if(end==s) return error(input, start, end);
 		}
-		if( integer ) return token(txt, start, end, Integer.parseInt(txt.substring(start,end)));
-		return token(txt, start, end, Double.parseDouble(txt.substring(start,end)));
+		if( integer ) return token(input, start, end, Integer.parseInt(input.substring(start,end)));
+		return token(input, start, end, Double.parseDouble(input.substring(start,end)));
 	}	
 }

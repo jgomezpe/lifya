@@ -42,72 +42,95 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: StringRecover</p>
+ * <p>Title: StringParser</p>
  *
- * <p>Description: Recovers (Load from a String) an String</p>
+ * <p>Description: Parses an String</p>
  *
  */
 public class StringParser implements Lexeme<String>{
-    public static final String TAG = "String";
-    public String type() { return TAG; }
+	/**
+	 * String lexema type TAG
+	 */
+	public static final String TAG = "String";
     
-    protected char quotation;
-
-    /**
-     * Creates a recovering method for strings
-     */
-    public StringParser() { this('"'); }
+	/**
+	 * Gets the type of String lexema
+	 * @return Type of String lexema
+	 */
+	public String type() { return TAG; }
     
-    public StringParser(char quotation) {
-	this.quotation = quotation;
-    }
+	protected char quotation;
 
-    public boolean startsWith(char c){ return c==quotation; }
+	/**
+	 * Creates a parsing method for strings, uses '"' as quotation for Strings
+	 */
+	public StringParser() { this('"'); }
+    
+	/**
+	 * Creates a parsing method for strings, using the provided quotation character
+	 * @param quotation Quotation character
+	 */
+	public StringParser(char quotation) { this.quotation = quotation; }
 
-    @Override
-    public Token match(Source txt, int start, int end) {
-	if(!this.startsWith(txt.get(start))) return error(txt, start, start);
-	int n = end;
-	end = start+1;
-	if(end==n) return error(txt, start, end);
-	String str = "";
-	while(end<n && txt.get(end)!=quotation){
-	    if(txt.get(end)=='\\'){
-		end++;
-		if(end==n) return error(txt, start, end);
-		if(txt.get(end)=='u') {
-		    end++;
-		    int c = 0;
-		    while(end<n && c<4 && (('0'<=txt.get(end) && txt.get(end)<='9') || 
-			('A'<=txt.get(end) && txt.get(end)<='F') ||
-			('a'<=txt.get(end) && txt.get(end)<='f'))){
-			end++;
-			c++;
-		    }
-		    if(c!=4) return error(txt, start, end);
-		    str += (char)Integer.parseInt(txt.substring(end-4,end),16);		    
-		}else {
-		    switch(txt.get(end)){
-			case 'n': str += '\n'; break;
-			case 'r': str += '\r'; break;
-			case 't': str += '\t'; break;
-			case 'b': str += '\b'; break;
-			case 'f': str += '\f'; break;
-			case '\\': case '/': str += txt.get(end); break;
-			default:
-			    if(txt.get(end)!=quotation)
-				return error(txt, start, end);
-			    str += quotation;
-		    }
-		    end++;
+	/**
+	 * Determines if the lexeme can star with the given character (quotation character)
+	 * @param c Character to analyze
+	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+	 */
+	@Override
+	public boolean startsWith(char c){ return c==quotation; }
+
+	/**
+	 * Creates a token with the String type
+	 * @param input Input source from which the token was built
+	 * @param start Starting position of the token in the input source
+	 * @param end Ending position (not included) of the token in the input source
+	 * @return Number token
+	 */
+	@Override
+	public Token match(Source input, int start, int end) {
+		if(!this.startsWith(input.get(start))) return error(input, start, start);
+		int n = end;
+		end = start+1;
+		if(end==n) return error(input, start, end);
+		String str = "";
+		while(end<n && input.get(end)!=quotation){
+			if(input.get(end)=='\\'){
+				end++;
+				if(end==n) return error(input, start, end);
+				if(input.get(end)=='u') {
+					end++;
+					int c = 0;
+					while(end<n && c<4 && (('0'<=input.get(end) && input.get(end)<='9') || 
+							('A'<=input.get(end) && input.get(end)<='F') ||
+							('a'<=input.get(end) && input.get(end)<='f'))){
+						end++;
+						c++;
+					}
+					if(c!=4) return error(input, start, end);
+					str += (char)Integer.parseInt(input.substring(end-4,end),16);		    
+				}else {
+					switch(input.get(end)){
+						case 'n': str += '\n'; break;
+						case 'r': str += '\r'; break;
+						case 't': str += '\t'; break;
+						case 'b': str += '\b'; break;
+						case 'f': str += '\f'; break;
+						case '\\': case '/': str += input.get(end); break;
+						default:
+							if(input.get(end)!=quotation)
+								return error(input, start, end);
+							str += quotation;
+					}
+					end++;
+				}
+			}else{
+				str += input.get(end);
+				end++;
+			}
 		}
-	    }else{
-		str += txt.get(end);
+		if(end==n) return error(input, start, end);
 		end++;
-	    }
-	}
-	if(end==n) return error(txt, start, end);
-	end++;
-	return token(txt, start, end, str);
-    }	
+		return token(input, start, end, str);
+	}	
 }

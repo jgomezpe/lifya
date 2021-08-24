@@ -49,12 +49,21 @@ public class ArrayStringifier {
 	protected char CLOSE = ']';
 	protected char SEPARATOR = ',';
 	
+	/**
+	 * Default constructor uses '[', ']', and ',' as formating characters 
+	 */
 	public ArrayStringifier() {}
 	
+	/**
+	 * Creates an array stringifier with the associated formatting characters
+	 * @param open Array opening character 
+	 * @param close Array closing character
+	 * @param separator Array elements separating character
+	 */
 	public ArrayStringifier( char open, char close, char separator ) {
-	    this.CLOSE = close;
-	    this.OPEN = open;
-	    this.SEPARATOR = separator;
+		this.CLOSE = close;
+		this.OPEN = open;
+		this.SEPARATOR = separator;
 	}
 	
 	/**
@@ -89,6 +98,11 @@ public class ArrayStringifier {
 	 */
 	public String apply(Object[] array) { return apply( array, 0, array.length); }
 	
+	/**
+	 * Stringifies an object if it is a kind o f array
+	 * @param obj Array to stringify 
+	 * @return A stringified version of the array
+	 */
 	public String apply(Object obj) {
 		if( obj.getClass().isArray() ) return apply(obj, 0, java.lang.reflect.Array.getLength(obj));
 		if( obj instanceof Array ) return apply(((Array<?>)obj).buffer, 0, ((Array<?>)obj).size());

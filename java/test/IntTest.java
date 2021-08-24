@@ -36,72 +36,31 @@
  * (E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A> )
  * @version 1.0
  */
-package lifya.lookahead;
+package test;
 
-import java.util.HashMap;
-
-import lifya.Lexer;
-import lifya.SyntacticParser;
 import lifya.Token;
+import lifya.lexeme.IntParser;
 
 /**
- * <p>Title: LAHParser</p>
+ * <p>Title: IntTest</p>
  *
- * <p>Description: Look a Head (LL1) parser. Checks the next Token in the token list to determine the Rule to use </p>
+ * <p>Description: Test parsing and stringifying integer numbers</p>
  *
  */
-public class LAHParser implements SyntacticParser{
-	protected HashMap<String, Rule> rule = new HashMap<String, Rule>();
-	protected String main;
-    
-	/**
-	 * Create a look a head syntactic parser with the given trial set of rules
-	 * @param rules Rules defining the syntactic parser
-	 * @param main Type of the main rule
-	 */
-	public LAHParser(Rule[] rules, String main) {
-		this.main = main;
-		for(Rule r:rules) {
-			rule.put(r.type(),r);
-			r.parser = this;
-		}	    
+public class IntTest {
+	public static void main(String[] args) {
+	    IntParser p = new IntParser();
+	    System.out.println("==============");
+	    Token t = p.match("123,ww");
+	    System.out.println(t);
+	    System.out.println("==============");
+	    t = p.match("123.3e-2");
+	    System.out.println(t);
+	    System.out.println("==============");
+	    t = p.match("123+4");
+	    System.out.println(t);
+	    System.out.println("==============");
+	    t = p.match("xx,456,ww",3);
+	    System.out.println(t);
 	}
-
-	/**
-	 * Sets the type of the main rule
-	 * @param rule Type of the main rule
-	 * @return Main syntactic rule 
-	 */
-	public Rule rule(String rule) { return this.rule.get(rule); }
-
-	/**
-	 * Gets the type of the main rule
-	 * @return Type of the main rule
-	 */
-	public String main(){ return main; }
-    
-	/**
-	 * Sets the type of the main rule
-	 * @param rule Type of the main rule
-	 */
-	public void main(String rule) { this.main = rule; }
-	
-	/**
-	 * Gets a syntactic token from the given lexer/tokenizer using the type of rule provided 
-	 * @param rule Type of the analyzing rule 
-	 * @param lexer Lexer to analyze
-	 * @return Syntactic token from the given lexer/tokenizer using the type of rule provided 
-	 */
-	public Token analyze(String rule, Lexer lexer) {
-		Rule r = this.rule(rule);
-		return r.analyze(lexer);
-	}
-
-	/**
-	 * Gets a syntactic token from the given lexer/tokenizer (uses the main rule)
-	 * @param lexer Lexer to analyze
-	 * @return Syntactic token from the given lexer/tokenizer
-	 */
-	@Override
-	public Token analyze(Lexer lexer) { return analyze(main,lexer); }
 }

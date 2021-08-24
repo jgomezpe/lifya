@@ -14,7 +14,15 @@
 */
 
 /////// Lyfia.js ////////////
+/**
+ * Considers a given String as an input for the language recognizer
+ */
 class Source{   
+    /**
+     * Creates a source input from the given String
+     * @param id Identification TAG of the input source
+     * @param input String used as input source
+     */
     constructor(input, id) {
         this.id = id || 'noname'
         this.input = input
@@ -27,6 +35,11 @@ class Source{
         this.length = input.length
     }
    
+    /**
+     * Gets [row,column] array when considering position a 2D position
+     * @param index Absolute position to be analyzed
+     * @return [row,column] array when considering the given absolute position a 2D position
+     */
     pos(index) {
         var idx = this.search.findLeft(index)
         if(idx+1<this.rows.length && this.rows[idx+1]==index)
@@ -34,40 +47,102 @@ class Source{
         return [idx, index-this.rows[idx]]
     }
     
+    /**
+     * Gets the character at the given position
+     * @param index Position of the character to obtain
+     * @return Character at the given position
+     */
     get(index) { return this.input.charAt(index) }
     
+    /**
+     * Obtains a substring of the input String
+     * @param start Starting position of the substring to obtain
+     * @param end Final position (not included) of the substring to obtain
+     * @return Substring of the input String
+     */
     substring(start,end) { return this.input.substring(start,end) }
 }
 
+/**
+ * Position of the reading cursor in the input source
+ */
 class Position{
+    /**
+     * Source name TAG
+     */
     static INPUT = "input"
+    /**
+     * Starting position TAG
+     */
     static START = "start"
+    /**
+     * Row position TAG (when considering as a 2D position in the source)
+     */
     static ROW = "row"
+    /**
+     * Column position TAG (when considering as a 2D position in the source)
+     */ 
     static COLUMN = "column"
+ 
+    /**
+     * Creates a position for the given source 
+     * @param input Input source
+     * @param start Absolute position on the source 
+     */
     constructor(input, start){
         this.input = input
         this.start = start 
     }
     
+    /**
+     * Shifts the absolute position a <i>delta</i> amount
+     * @param delta delta moving of the absolute position
+     */
     shift(delta) { start+=delta }
 
+    /**
+     * Configures the position with the given JSON info
+     * @param json JSON configuration information
+     */
     config(json) {
         this.input = json.input
         this.start = json.start
     }
 
+    /**
+     * Gets a JSON version of the position
+     * @return JSON version  of the position
+     */
     json() {
         var pos = this.input.pos(this.start)
-    return {"input":this.input.id, "start":this.start,
+        return {"input":this.input.id, "start":this.start,
         "row":pos[0], "column":pos[1]}
     }
     
+    /**
+     * Stringifies the position
+     * @return Strigified versionof the position
+     */
     stringify(){ return JSON.stringify(this.json()) }
 }
 
+/**
+ * Language token (may be a lexeme, a syntactic rule, an object associated with a position in the source 
+ */
 class Token extends Position{    
+    /**
+     * Error's TAG. Used for identifying error tokens
+     */
     static ERROR = 'error'
         
+    /**
+     * Creates a token
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @param value Value stored by the token
+     * @param type Token type
+     */
     constructor(input, start, end, value, type){
         super(input, start)
         this.end = end
@@ -75,13 +150,25 @@ class Token extends Position{
         this.value = value
     }
 
+    /**
+     * Computes the length (number of symbols) consumed by the token 
+     * @return Length (number of symbols) consumed by the token
+     */
     size(){ return this.end-this.start }
     
+    /**
+     * Shifts the absolute position a <i>delta</i> amount
+     * @param delta delta moving of the absolute position
+     */
     shift(delta) {
         this.start+=delta
         this.end+=delta
     }
 
+    /**
+     * Gets a JSON version of the token
+     * @return JSON version  of the token
+     */
     json() {
         var json = super.json()
         json.end = this.end
@@ -90,22 +177,42 @@ class Token extends Position{
         return json
     }
     
+    /**
+     * Converts the token to an error version of it
+     * @return Error version of the token
+     */
     toError() { return new Token(this.input,this.start,this.end,this.type) }
     
+    /**
+     * Determines if it is an error token or not 
+     * @return <i>true</i> if an error token, <i>false</i> otherwise 
+     */
     isError() { return this.type==Token.ERROR }
 }
 
+/**
+ * Character analyze functions
+ */
 Character = {
     isDigit(c){ return '0'<=c && c<='9' },
     isLowerCase(c){ return ('a'<=c && c<='z') },
     isUpperCase(c){ return ('A'<=c && c<='Z') },
     isLetter(c){ return this.isLowerCase(c) || this.isUpperCase(c) },
     isHexa(c){ return Character.isDigit(c) || ('A'<=c&&c<='F') || ('a'<=c&&c<='f') },
-    isAlphabetic(c){ return Character.isDigit(c) || Character.isLetter(c) }
-    
+    isAlphabetic(c){ return Character.isDigit(c) || Character.isLetter(c) }    
 }
 
+/**
+ * Read objects from an input source 
+ */
 class Read {
+    /**
+     * Reads an object from the input source (limited to the given starting and ending positions) 
+     * @param input Symbol source
+     * @param start Starting position for reading a token
+     * @param end Ending position for reading a token (not included)
+     * @return Object read from the symbol source
+     */
     get(input, start, end){
         start = start || 0
         end = end || input.length
@@ -116,38 +223,78 @@ class Read {
         return t.value
     }
 
+    /**
+     * Reads a token from the input String (limited to the given starting and ending positions) 
+     * @param input String source
+     * @param start Starting position for reading a token
+     * @param end Ending position for reading a token (not included)
+     * @return Token read from the input String
+     */
     match(input, start, end){}
 }
 
 
 //////// LEXEME ////////////
-
+/**
+ * Abstract lexeme
+ */
 class Lexeme extends Read{
     /**
      * Determines if the lexeme can star with the given character
-     * @param c Character to analize
+     * @param c Character to analyze
      * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
      */
     startsWith(c){ return false }
 
+    /**
+     * Creates an error token with the lexema type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @return Error token with the lexema type
+     */
     error(input, start, end) {
         return new Token(input,start,end,this.type)
     }
     
+    /**
+     * Creates a token with the lexema type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @param value Value stored by the token
+     * @return Lexema token
+     */
     token(input, start, end, value) {
         return new Token(input,start,end,value,this.type)
     }
 }
 
+/**
+ * Parses spaces (' ', '\n', '\r', and '\t') </p>
+ */
 class Space extends Lexeme{
+    /**
+     * Space lexema TAG
+     */
     static TAG = "space"
     
+    /** 
+    * Default constructor
+    */
     constructor(){ 
         super()
         this.type = Space.TAG 
         this.white = new RegExp(/^\s$/)
     }
     
+    /**
+     * Creates a token with the space type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @return Integer token
+     */
     match(input, start, end) {
         start = start || 0
         end = end || input.length
@@ -160,12 +307,28 @@ class Space extends Lexeme{
         return this.token(input,start,end," ")
     }
 
+    /**
+     * Determines if the lexeme can star with the given character (' ', '\n', '\r', and '\t')
+     * @param c Character to analyze
+     * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+     */
     startsWith(c) { return this.white.test(c) }
 }
 
+/**
+ * Parses any of the characters/symbols in a symbol collection</p>
+ */
 class Symbol extends Lexeme{
+    /**
+     * General symbol lexema type TAG
+     */
     static TAG = "symbol"
     
+    /**
+     * Creates a parser for a set of symbols
+     * @param symbols Symbols that will be considered in the lexema
+     * @param type Type for the symbols lexema (default "symbol")
+     */
     constructor(symbols, type=Symbol.TAG){
         super()
         this.type = type
@@ -173,6 +336,13 @@ class Symbol extends Lexeme{
             this[symbols.charAt(i)] = symbols.charAt(i)
     }
     
+    /**
+     * Creates a token with the symbol type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @return Symbol token
+     */
     match(input, start, end) {
         start = start || 0
         end = end || input.length
@@ -183,16 +353,39 @@ class Symbol extends Lexeme{
             return this.error(input,start,start+1)
     }
     
+    /**
+     * Determines if the symbol lexeme can star with the given character (a character in the set)
+     * @param c Character to analyze
+     * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+     */
     startsWith(c) { return this[c] !== undefined }    
 }
 
+/**
+ * Parses ids: [_a-zA-Z][_a-zA-Z0-9]*</p>
+ */
 class ID extends Lexeme{
+    /**
+     * IDs TAG
+     */
     static TAG = 'ID'
+    
+    /**
+     * Creates an ID lexeme
+     * @param type Type of the ID lexema
+     */
     constructor(type=ID.TAG){ 
         super()
         this.type = type
     }
     
+    /**
+     * Creates a token with the ID type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @return ID token
+     */
     match(input, start, end) {
         start = start || 0
         end = end || input.length
@@ -209,17 +402,36 @@ class ID extends Lexeme{
         return this.token(input,start,end,input.substring(start,end))
     }
 
+    /**
+     * Determines if the lexeme can star with the given character (a letter or '_')
+     * @param c Character to analyze
+     * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+     */
     startsWith(c){ return c=='_' || Character.isLetter(c) }
 }
 
-
+/**
+ * Parses any of the strings/words provided in the set of words, useful for reserved words in a programming language.
+ */
 class Words extends Lexeme{
+    /**
+     * Creates a parser for the provided set of strings/words 
+     * @param type Type of the set of words
+     * @param word Set of words defining the lexema
+     */
     constructor(type, word) {
         super()
         this.word = word
         this.type = type
     }
     
+    /**
+     * Creates a token with the set of words type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @return Number token
+     */
     match(input, start, end) {
         start = start || 0
         end = end || input.length
@@ -231,6 +443,11 @@ class Words extends Lexeme{
         return this.error(input,start,start+1)
     }
 
+    /**
+     * Determines if the set of words lexeme can star with the given character (a character in the set)
+     * @param c Character to analyze
+     * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+     */
     startsWith(c) {
         for(var i=0; i<this.word.length; i++)
             if(this.word[i].charAt(0)==c) return true
@@ -238,7 +455,13 @@ class Words extends Lexeme{
     }
 }
 
+/**
+ * Parses numbers (integer or real)
+ */
 class NumberParser extends Lexeme{
+    /**
+     * Number lexema type TAG
+     */
     static TAG = "number"
 
     constructor(){
@@ -246,10 +469,27 @@ class NumberParser extends Lexeme{
         this.type = NumberParser.TAG
     }
     
+    /**
+     * Determines if the character is a '+' or '-'
+     * @param c Character to analyze 
+     * @return <i>true</i> if the character is a '+' or '-', <i>false</i> otherwise.
+     */
     isSign(c){ return ('-'==c || c=='+') }
 
+    /**
+     * Determines if the lexeme can star with the given character (a digit or '+', '-')
+     * @param c Character to analyze
+     * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+     */
     startsWith(c){ return this.isSign(c) || Character.isDigit(c) }
 
+    /**
+     * Creates a token with the number type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @return Number token
+     */
     match(input, start, end){
         start = start || 0
         end = end || input.length
@@ -286,17 +526,39 @@ class NumberParser extends Lexeme{
     }   
 }
 
+/**
+ * Parses an String
+ */
 class StringParser extends Lexeme{
+    /**
+     * String lexema type TAG
+     */
     static TAG = "string"
     
-    constructor(quotation) {
+    /**
+     * Creates a parsing method for strings, using the provided quotation character
+     * @param quotation Quotation character (default '"')
+     */
+    constructor(quotation='"') {
         super()
         this.type = StringParser.TAG
-        this.quotation = quotation || '"'
+        this.quotation = quotation
     }
 
+    /**
+     * Determines if the lexeme can star with the given character (quotation character)
+     * @param c Character to analyze
+     * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+     */
     startsWith(c){ return c==this.quotation }
 
+    /**
+     * Creates a token with the String type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @return Number token
+     */
     match(input, start, end) {
         start = start || 0
         end = end || input.length
@@ -345,20 +607,44 @@ class StringParser extends Lexeme{
     }   
 }
 
-
-
+/**
+ * Parses a Blob/Byte array using Base64
+ */
 class BlobParser extends Lexeme{     
+    /**
+     * Starter character of a blob, if required
+     */
     static STARTER = '#'
+    /**
+     * Blob type TAG
+     */
     static TAG = "byte[]"
 
+    /**
+     * Creates a Blob parser 
+     * @param useStarter <i>true</i> indicates that parser must check for starter character, <i>false</i> indicates
+     * that parser does no requires starter character (default <i>false</i>)
+     */
     constructor(useStarter=false) {
         super()
         this.useStarter = useStarter 
         this.type = BlobParser.TAG
     }
 
+    /**
+     * Determines if a character is a valid Base64 character
+     * @param c Character to analyze
+     * @return <i>true</i> if a character is a valid Base64 character, <i>false</i> otherwise
+     */
     valid(c) { return Character.isAlphabetic(c) || c=='+'||c=='/' }
     
+    /**
+     * Creates a token with the blob/bitarray type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @return Blob token
+     */
     match(input, start, end){
         start = start || 0
         end = end || input.length
@@ -381,15 +667,30 @@ class BlobParser extends Lexeme{
         return this.token(input,start,end,Base64.decode(input.substring(s,end)))
     }
 
+    /**
+     * Determines if the lexeme can star with the given character
+     * @param c Character to analyze
+     * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+     */
     startsWith(c) {
         return this.useStarter?(c==BlobParser.STARTER):this.valid(c)
     }
 }
 
 ///////////// LEXER ////////////////
+/**
+ * TAG for Array of tokens
+ */
 const TOKEN_LIST = "Token[]"
 
+/**
+ * Language lexer
+ */
 class Lexer extends Read{
+    /**
+     * Creates a Lexer that removes (does not take into account) the given Token types
+     * @param removableTokens Tokens that will be removed from analysis
+     */
     constructor(removableTokens){
         super()
         this.removableTokens = removableTokens || []
@@ -397,8 +698,18 @@ class Lexer extends Read{
         this.back = false
     }
     
+    /**
+     * Makes the Lexer (Tokenizer) to consider or not (put in the generated Array of tokens) the removable tokens 
+     * @param remove <i>true</i>: Lexer will not consider removable tokens, <i>false</i>: Lexer will consider removable tokens. 
+     */
     removeTokens(remove) { this.remove = remove }
     
+    /**
+     * Initialize the lexer over the input String (limited to the given starting and ending positions) 
+     * @param input String source
+     * @param start Starting position for reading a token
+     * @param end Ending position for reading a token (not included)
+     */
     init(input, start, end) {
         this.start = start || 0
         this.end = end || input.length
@@ -407,14 +718,27 @@ class Lexer extends Read{
         this.back = false 
     }
     
+    /**
+     * Gets the last read/available Token 
+     * @return Last read/available Token
+     */
     obtain(){}
     
+    /**
+     * Determines if a Token is removable or not
+     * @param t Token to analyze
+     * @return <i>true</i> If the Token can e removed, <i>false</i> otherwise.
+     */
     removable(t) {
         var i=0
         while(i<this.removableTokens.length && t.type!=this.removableTokens[i]) i++
         return(i!=this.removableTokens.length) 
     }
     
+    /**
+     * Gets the next available Token
+     * @return Nex available Token
+     */
     next() {
         if(this.back) {
             this.back = false
@@ -425,8 +749,18 @@ class Lexer extends Read{
         return this.current
     }
     
+    /**
+     * Makes the Lexer to go back one token
+     */
     goback() { this.back = true; }
     
+    /**
+     * Reads a token from the input Source (limited to the given starting and ending positions) 
+     * @param input String source
+     * @param start Starting position for reading a token
+     * @param end Ending position for reading a token (not included)
+     * @return Token read from the input String
+     */
     match(input, start, end) {
         this.init(input,start,end)
         var list = []
@@ -438,18 +772,39 @@ class Lexer extends Read{
             return t
     }
     
+    /**
+     * Removes from the Token lists tokens with the given tag
+     * @param tokens Tokens to be analyzed
+     * @param toremove Tag of the tokens to be removed
+     * @return The Array of tokens without the desired tokens
+     */
     remove(tokens, toremove ){
         for( var i=tokens.size()-1; i>=0; i-- )
             if( this.toremove.indexOf(tokens[i].type) >= 0 ) tokens.splice(i,1)
         return tokens
     }
     
+    /**
+     * Removes from the Token lists space tokens
+     * @param tokens Tokens to be analyzed
+     * @return The Array of tokens without space tokens
+     */
     remove_space(tokens ){ 
         return remove(tokens, Space.TAG)
     }   
 }
 
+/**
+ * Look a Head (LL1) lexer. Checks the next character in the input to determine the Lexema to use
+ */
 class LookAHeadLexer extends Lexer{
+    /**
+     * Creates a Lexer from a set of lexema each one with an associated priority of analysis and
+     * removes (does not take into account) the given Token types
+     * @param lexemes Set of lexema that can recognize the Lexer
+     * @param removableTokens Tokens that will be removed from analysis
+     * @param priority Priority of the lexema (default null)
+     */
     constructor( removableTokens, lexemes, priority=null ){
         super(removableTokens)
         this.lexeme = {}
@@ -460,6 +815,10 @@ class LookAHeadLexer extends Lexer{
         }
     }
     
+    /**
+     * Gets the last read/available Token 
+     * @return Last read/available Token
+     */
     obtain() {
         if(this.start>=this.end) return null
         var c = this.input.get(this.start)
@@ -500,29 +859,82 @@ class LookAHeadLexer extends Lexer{
 
 /////////// PARSER RULE'S /////////////////////
 
+/**
+ * Parsing rule
+ */
 class Rule{ 
+    /**
+     * Creates a syntactic rule for a parser
+     * @param type Type of the rule
+     * @param parser Syntactic parser using the rule
+     */
     constructor(type, parser) { 
         this.parser = parser
         this.type = type
     }
     
+    /**
+     * Determines if the rule can start with the given token
+     * @param t Token to analyze
+     * @return <i>true</i> If the rule can start with the given token <i>false</i> otherwise
+     */
     startsWith(t){}
 
+    /**
+     * Determines if the symbol token comes from a given symbol lexema type and its value
+     * is the same as the character passed as argument 
+     * @param token Symbol token
+     * @param c Character to analyze
+     * @param TAG Type of the lexema (default Symbol Tag)
+     * @return <i>true</i> if the symbol token comes from a given symbol lexema type and its value
+     * is the same as the character passed as argument, <i>false</i> otherwise.
+     */
     check_symbol(token, c, TAG=Symbol.TAG) {
         return token.type==TAG && token.value==c
     }
     
-    analize(lexer, current=lexer.next()){}
+    /**
+     * Creates a rule token using the <i>current</i> token as first token to analyze
+     * @param lexer Lexer 
+     * @param current Initial token (default lexer.next())
+     * @return Rule token
+     */
+    analyze(lexer, current=lexer.next()){}
     
+    /**
+     * Creates a eof token 
+     * @param input Input source 
+     * @param end Position to be considered the end of the input source
+     * @return EOF token
+     */
     eof(input, end) { return new Token(input,end,end,this.type) }
         
+    /**
+     * Creates a token with the rule type
+     * @param input Input source from which the token was built
+     * @param start Starting position of the token in the input source
+     * @param end Ending position (not included) of the token in the input source
+     * @param value Value stored by the token
+     * @return Rule token
+     */
     token(input, start, end, value) {
         return new Token(input, start, end, value, this.type)
     }
 }
 
+/**
+ * A Parsing rule for lists
+ */
 class ListRule extends Rule{
-
+    /**
+     * Creates a lists syntactic rule 
+     * @param type Type of the rule
+     * @param parser Syntactic parser using the rule
+     * @param item_rule Rule type of the elements of the list
+     * @param left Left character of the list (default '[')
+     * @param right Right character of the list (default ']')
+     * @param separator Elements separating character (default ',')
+     */ 
     constructor(type, parser, item_rule, left='[', right=']', separator=',') { 
         super(type, parser)
         this.item_rule = item_rule
@@ -531,9 +943,20 @@ class ListRule extends Rule{
         this.SEPARATOR = separator
     }
     
+    /**
+     * Determines if the rule can start with the given token (left character)
+     * @param t Token to analyze
+     * @return <i>true</i> If the rule can start with the given token <i>false</i> otherwise
+     */
     startsWith(t) { return this.check_symbol(t, this.LEFT) }
     
-    analize(lexer, current=lexer.next()) {
+    /**
+     * Creates a rule token using the <i>current</i> token as first token to analyze
+     * @param lexer Lexer 
+     * @param current Initial token
+     * @return List rule token
+     */
+    analyze(lexer, current=lexer.next()) {
         if(!this.startsWith(current)) return current.toError()
         var input = current.input
         var start = current.start
@@ -541,7 +964,7 @@ class ListRule extends Rule{
         var list = []
         current = lexer.next()
         while(current!=null && !this.check_symbol(current, this.RIGHT)){
-            var t = this.parser.rule(this.item_rule).analize(lexer, current)
+            var t = this.parser.rule(this.item_rule).analyze(lexer, current)
             if(t.isError()) return t
             list.push(t)
             end = current.end
@@ -559,7 +982,16 @@ class ListRule extends Rule{
     }
 }
 
+/**
+ * A parser rule for selecting from multiple rules
+ */
 class Options extends Rule{
+    /**
+     * Creates an optional syntactic rule for a parser
+     * @param type Type of the options rule
+     * @param parser Syntactic parser using the rule
+     * @param options Optional syntactic rules
+     */
     constructor(type, parser, options) {
         super(type, parser)
         this.option = options
@@ -571,16 +1003,35 @@ class Options extends Rule{
         return i
     }
     
+    /**
+     * Determines if the rule can start with the given token
+     * @param t Token to analyze
+     * @return <i>true</i> If the rule can start with the given token <i>false</i> otherwise
+     */
     startsWith(t) { return this.rule(t)<this.option.length }
 
-    analize(lexer, current=lexer.next()){
+    /**
+     * Creates a rule token using the <i>current</i> token as first token to analyze
+     * @param lexer Lexer 
+     * @param current Initial token
+     * @return Rule token
+     */
+    analyze(lexer, current=lexer.next()){
         var r=this.rule()
         if(r==this.option.length) return current.toError()   
-        return this.option[r].analize(lexer, current)
+        return this.option[r].analyze(lexer, current)
     }    
 }
 
+/**
+ * Look a Head (LL1) parser. Checks the next Token in the token list to determine the Rule to use
+ */
 class Parser{
+    /**
+     * Create a look a head syntactic parser with the given trial set of rules
+     * @param rules Rules defining the syntactic parser
+     * @param main Type of the main rule
+     */
     constructor(rules, main) {
         this.main = main
         this.rules = {}
@@ -590,20 +1041,47 @@ class Parser{
         }      
     }
 
+    /**
+     * Sets the type of the main rule
+     * @param rule Type of the main rule
+     * @return Main syntactic rule 
+     */
     rule(r) { return this.rules[r] }
 
-    analize(lexer, r) {
-        return this.rule(r || this.main).analize(lexer)
+    /**
+     * Gets a syntactic token from the given lexer/tokenizer using the type of rule provided 
+     * @param rule Type of the analyzing rule 
+     * @param lexer Lexer to analyze
+     * @return Syntactic token from the given lexer/tokenizer using the type of rule provided 
+     */
+    analyze(lexer, r) {
+        return this.rule(r || this.main).analyze(lexer)
     }
 }
 
+/**
+ * Gives meaning to parser trees/objects produced by the language parser
+ */
 class Meaner{
+    /**
+     * Creates a semantic token from a Syntactic token
+     * @param g_obj Syntatic token 
+     * @return Semantic token from a Syntactic token
+     */
     apply(t){}
 }
 
 /////////// LANGUAGE //////////////
-
+/**
+ * Abstract definition of a language with lexer, parser and meaner
+ */
 class Language extends Read{
+    /**
+     * Creates a language with the given lexer, parser, and meaner
+     * @param lexer Language lexer
+     * @param parser Language syntactic parser
+     * @param meaner Language semantic meaner
+     */
     constructor( lexer, parser, meaner ){
         super()
         this.lexer = lexer
@@ -611,9 +1089,16 @@ class Language extends Read{
         this.meaner = meaner
     }
     
+    /**
+     * Reads a semantic token from the input source starting at the position given up to the ending position
+     * @param input Symbol source
+     * @param start Starting position for reading a token
+     * @param end Ending position for reading a token (not included)
+     * @return Semantic token read from the source
+     */
     match(input, start, end) {
         this.lexer.init(input, start, end)
-        var t = this.parser.analize(this.lexer)
+        var t = this.parser.analyze(this.lexer)
         if(!t.isError()) t = this.meaner.apply(t)
         return t
     }

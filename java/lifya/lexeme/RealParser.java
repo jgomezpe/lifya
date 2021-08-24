@@ -41,20 +41,37 @@ package lifya.lexeme;
 import lifya.Token;
 
 /**
- * <p>Title: RealRecover</p>
+ * <p>Title: RealParser</p>
  *
- * <p>Description: Parse (Load from a String) a real number (Double)</p>
+ * <p>Description: Parses a real number (Double)</p>
  *
  */
 public class RealParser extends lifya.lexeme.NumberParser{
-    public static final String TAG = "double";
+	/**
+	 * Real number lexema TAG
+	 */
+	public static final String TAG = "double";
+
+	/**
+	 * Gets the type of real number lexema
+	 * @return Type of real number lexema
+	 */
 	public String type() { return TAG; }
-	public Token match(String txt, int start){
-	    Token t = super.match(txt, start);
-	    if(t.type().equals(type()) && t.value() instanceof Integer) {
-		int x = (Integer)t.value();
-		t.value((double)(x));
-	    }
-	    return t;
+
+	/**
+	 * Creates a token with the real number type
+	 * @param input Input source from which the token was built
+	 * @param start Starting position of the token in the input source
+	 * @param end Ending position (not included) of the token in the input source
+	 * @return Integer token
+	 */
+	@Override
+	public Token match(String input, int start, int end){
+		Token t = super.match(input, start, end);
+		if(t.type().equals(type()) && t.value() instanceof Integer) {
+			int x = (Integer)t.value();
+			t.value((double)(x));
+		}
+		return t;
 	}
 }

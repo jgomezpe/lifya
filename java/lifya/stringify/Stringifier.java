@@ -47,6 +47,9 @@ import speco.array.ArrayStringifier;
 
 import java.util.HashMap;
 
+import speco.object.JXONfyable;
+import speco.jxon.JXON;
+
 /**
  * <p>Title: Stringifier</p>
  *
@@ -54,112 +57,192 @@ import java.util.HashMap;
  *
  */
 public class Stringifier {	
-    /**
-     * Stringifies the object
-     * @param obj Object to be stringified
-     * @return An stringified version of the object
-     */
-    public static String apply(Stringifyable obj) {
-	return obj.stringify();
-    }
+	/**
+	 * Stringifies the object
+	 * @param obj Object to be stringified
+	 * @return Stringified version of the object
+	 */
+	public static String apply(Stringifyable obj) { return obj.stringify(); }
    
-    /**
-     * Stringifies a portion of an array
-     * @param array Array to be stringified
-     * @param OPEN Opening character in the stringified version of the array
-     * @param CLOSE Closing character in the stringified version of the array 
-     * @param SEPARATOR Elements separating character in the stringified version of the array 
-     * @return An stringified version of the portion of the array
-     */
-    public static String apply(Object array, char OPEN, char CLOSE, char SEPARATOR) {
-	ArrayStringifier str = new ArrayStringifier(OPEN,CLOSE,SEPARATOR);
-	return str.apply(array);	
-    }
-    
-    public static String apply(Array<?> array) {
-	return apply(array,'[', ']', ',');
-    }
-    
-    public static String apply(Array<?> array, char OPEN, char CLOSE, char SEPARATOR) {
-	ArrayStringifier str = new ArrayStringifier(OPEN,CLOSE,SEPARATOR);
-	return str.apply(array);	
-    }
-    
-    public static String apply(HashMap<String, Object> map) {
-	return apply(map, '{', '}', ',', ':');
-    }
-
-    public static String apply(HashMap<String, Object> map, 
-	    char OPEN, char CLOSE, char SEPARATOR, char ASSIGN) {
-	StringBuilder sb = new StringBuilder();
-	boolean flag = false;
-	if( OPEN != '\0' ) sb.append(OPEN);
-	for( String key:map.keySet() ) {
-		if( flag ) sb.append(SEPARATOR);
-		sb.append(apply(key));
-		sb.append(ASSIGN);
-		sb.append(apply(map.get(key)));
-		flag = true;
+	/**
+	 * Stringifies an array with the associated formatting characters
+	 * @param array Array to be stringified
+	 * @param OPEN Array opening character 
+	 * @param CLOSE Array closing character
+	 * @param SEPARATOR Array elements separating character
+	 * @return Stringified version of the portion of the array
+	 */
+	public static String apply(Object array, char OPEN, char CLOSE, char SEPARATOR) {
+		ArrayStringifier str = new ArrayStringifier(OPEN,CLOSE,SEPARATOR);
+		return str.apply(array);	
 	}
-	if( CLOSE != '\0' ) sb.append(CLOSE);
-	return sb.toString();
-    }
     
-    /**
-     * Stringifies the object
-     * @param obj Object to be stringified
-     * @return An stringified version of the object
-     */
-    @SuppressWarnings("unchecked")
-    public static String apply( Object obj ){
-	if(obj==null) return "null";
-	if(obj.getClass().isArray()) return apply(obj, '[', ']', ',');
-	if(obj instanceof String) return apply((String)obj);
-	if(obj instanceof Stringifyable) return apply((Stringifyable)obj);
-	if(obj instanceof Array) return apply((Array<?>)obj);
-	if(obj instanceof HashMap) return apply((HashMap<String,Object>)obj);
-	return obj.toString();
-    }
-
-    public static String apply(String str) { return apply(str, '"'); }
+	
+	/**
+	 * Stringifies an array with '[', ']', and ',' as formatting characters
+	 * @param array Array to be stringified
+	 * @return Stringified version of the array
+	 */
+	public static String apply(Array<?> array) { return apply(array,'[', ']', ','); }
     
-    public static String apply(String str, char quotation) {
-	StringBuilder sb = new StringBuilder();
-	sb.append(quotation);
-	for( int i=0; i<str.length(); i++ ){
-	    char c = str.charAt(i);
-	    switch( c ){
-	    case '\\': sb.append("\\\\"); break;
-	    case '\b': sb.append("\\b"); break;
-	    case '\f': sb.append("\\f"); break;
-	    case '\n': sb.append("\\n"); break;
-	    case '\r': sb.append("\\r"); break;
-	    case '\t': sb.append("\\t"); break;
-	    default:
-		if( c < 32 || c > 255 ){
-		    sb.append("\\u");
-		    sb.append(Integer.toHexString((int)c));
-		}else if(c==quotation)
-		    sb.append("\\"+quotation);
-		else
-		    sb.append(c);
-		break;
-	    }
+	/**
+	 * Stringifies an array with the associated formatting characters
+	 * @param array Array to be stringified
+	 * @param OPEN Array opening character 
+	 * @param CLOSE Array closing character
+	 * @param SEPARATOR Array elements separating character
+	 * @return Stringified version of the array
+	 */
+	public static String apply(Array<?> array, char OPEN, char CLOSE, char SEPARATOR) {
+		ArrayStringifier str = new ArrayStringifier(OPEN,CLOSE,SEPARATOR);
+		return str.apply(array);	
 	}
-	sb.append(quotation);
-	return sb.toString();				
-    }
     
-    public static String apply(Character c) { return apply(""+c, '"'); }
+	/**
+	 * Stringifies a hashmap with '{', '}', ':', and ',' as formatting characters
+	 * @param map HashMap to be stringified
+	 * @return Stringified version of the hashmap
+	 */
+	public static String apply(HashMap<String, Object> map) {
+		return apply(map, '{', '}', ',', ':');
+	}
 
-    public static String apply(byte[] blob) { return apply(blob, ""+BlobParser.STARTER); }
+	/**
+	 * Stringifies a hashmap with the associated formatting characters
+	 * @param map HashMap to be stringified
+	 * @param OPEN Array opening character 
+	 * @param CLOSE Array closing character
+	 * @param SEPARATOR Array elements separating character
+	 * @param ASSIGN key/value assign character
+	 * @return Stringified version of the hashmap
+	 */
+	public static String apply(HashMap<String, Object> map, 
+			char OPEN, char CLOSE, char SEPARATOR, char ASSIGN) {
+		StringBuilder sb = new StringBuilder();
+		boolean flag = false;
+		if( OPEN != '\0' ) sb.append(OPEN);
+		for( String key:map.keySet() ) {
+			if( flag ) sb.append(SEPARATOR);
+			sb.append(apply(key));
+			sb.append(ASSIGN);
+			sb.append(apply(map.get(key)));
+			flag = true;
+		}
+		if( CLOSE != '\0' ) sb.append(CLOSE);
+		return sb.toString();
+	}
+
+	/**
+	 * Stringifies a JXON 
+	 * @param jxon JXON to be stringified
+	 * @return Stringified version of the JXON
+	 */
+	public static String apply(JXON jxon) {
+		StringBuilder sb = new StringBuilder();
+		boolean flag = false;
+		sb.append('{');
+		for( String key:jxon.keys() ) {
+			if( flag ) sb.append(',');
+			sb.append(apply(key));
+			sb.append(':');
+			sb.append(apply(jxon.get(key)));
+			flag = true;
+		}
+		sb.append('}');
+		return sb.toString();
+	}
     
-    public static String apply(byte[] blob, String STARTER) {
-	Encoder enc = Base64.getMimeEncoder();
-	String txt = enc.encodeToString(blob);
-	StringBuilder sb = new StringBuilder(); 
-	sb.append(STARTER);
-	sb.append(txt);
-	return sb.toString();
-    }
+	/**
+	 * Stringifies a JXONfyable object 
+	 * @param jxon JXONfyable object to be stringified
+	 * @return Stringified version of the JXONfyable object
+	 */
+	public static String apply(JXONfyable jxon) { return apply(jxon.jxon()); }
+    
+	/**
+	 * Stringifies an object
+	 * @param obj Object to be stringified
+	 * @return Stringified version of the object
+	 */
+	@SuppressWarnings("unchecked")
+	public static String apply( Object obj ){
+		if(obj==null) return "null";
+		if(obj.getClass().isArray()) return apply(obj, '[', ']', ',');
+		if(obj instanceof String) return apply((String)obj);
+		if(obj instanceof Stringifyable) return apply((Stringifyable)obj);
+		if(obj instanceof Array) return apply((Array<?>)obj);
+		if(obj instanceof JXONfyable) return apply((JXONfyable)obj);
+		if(obj instanceof HashMap) return apply((HashMap<String,Object>)obj);
+		if(obj instanceof JXON) return apply((JXON)obj);
+		return obj.toString();
+	}
+
+	/**
+	 * Stringifies a String
+	 * @param str String to be stringified
+	 * @return Stringified version of the String
+	 */
+	public static String apply(String str) { return apply(str, '"'); }
+    
+	/**
+	 * Stringifies a String using the provided character as quotation
+	 * @param str String to be stringified
+	 * @param quotation Character used as quotation for the string
+	 * @return Stringified version of the String
+	 */
+	public static String apply(String str, char quotation) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(quotation);
+		for( int i=0; i<str.length(); i++ ){
+			char c = str.charAt(i);
+			switch( c ){
+				case '\\': sb.append("\\\\"); break;
+				case '\b': sb.append("\\b"); break;
+				case '\f': sb.append("\\f"); break;
+				case '\n': sb.append("\\n"); break;
+				case '\r': sb.append("\\r"); break;
+				case '\t': sb.append("\\t"); break;
+				default:
+					if( c < 32 || c > 255 ){
+						sb.append("\\u");
+						sb.append(Integer.toHexString((int)c));
+					}else if(c==quotation)
+						sb.append("\\"+quotation);
+					else
+						sb.append(c);
+				break;
+			}
+		}
+		sb.append(quotation);
+		return sb.toString();				
+	}
+    
+	/**
+	 * Stringifies a character
+	 * @param c Character to stringify
+	 * @return Stringified version of the character
+	 */
+	public static String apply(Character c) { return apply(""+c, '"'); }
+
+	/**
+	 * Stringifies a blob (byte array) using Base64 and character # as starter for identifying a blob
+	 * @param blob Byte array/blob to stringify
+	 * @return Stringified version of the blob/byte array
+	 */
+	public static String apply(byte[] blob) { return apply(blob, ""+BlobParser.STARTER); }
+    
+	/**
+	 * Stringifies a blob (byte array) using Base64 and the provided character as starter for identifying a blob
+	 * @param blob Byte array/blob to stringify
+	 * @param STARTER Starter character for identifying a blob
+	 * @return Stringified version of the blob/byte array
+	 */
+	public static String apply(byte[] blob, String STARTER) {
+		Encoder enc = Base64.getMimeEncoder();
+		String txt = enc.encodeToString(blob);
+		StringBuilder sb = new StringBuilder(); 
+		sb.append(STARTER);
+		sb.append(txt);
+		return sb.toString();
+	}
 }

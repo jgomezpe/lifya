@@ -36,72 +36,42 @@
  * (E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A> )
  * @version 1.0
  */
-package lifya.lookahead;
+package lifya.lexeme;
 
-import java.util.HashMap;
-
-import lifya.Lexer;
-import lifya.SyntacticParser;
 import lifya.Token;
 
 /**
- * <p>Title: LAHParser</p>
+ * <p>Title: IntParser</p>
  *
- * <p>Description: Look a Head (LL1) parser. Checks the next Token in the token list to determine the Rule to use </p>
+ * <p>Description: Parses an Integer</p>
  *
  */
-public class LAHParser implements SyntacticParser{
-	protected HashMap<String, Rule> rule = new HashMap<String, Rule>();
-	protected String main;
-    
+public class IntParser extends lifya.lexeme.NumberParser{
 	/**
-	 * Create a look a head syntactic parser with the given trial set of rules
-	 * @param rules Rules defining the syntactic parser
-	 * @param main Type of the main rule
+	 * Integer lexema TAG
 	 */
-	public LAHParser(Rule[] rules, String main) {
-		this.main = main;
-		for(Rule r:rules) {
-			rule.put(r.type(),r);
-			r.parser = this;
-		}	    
-	}
+	public static final String TAG = "int";
 
 	/**
-	 * Sets the type of the main rule
-	 * @param rule Type of the main rule
-	 * @return Main syntactic rule 
+	 * Gets the type of integer lexema
+	 * @return Type of integer lexema
 	 */
-	public Rule rule(String rule) { return this.rule.get(rule); }
-
-	/**
-	 * Gets the type of the main rule
-	 * @return Type of the main rule
-	 */
-	public String main(){ return main; }
-    
-	/**
-	 * Sets the type of the main rule
-	 * @param rule Type of the main rule
-	 */
-	public void main(String rule) { this.main = rule; }
+	public String type() { return TAG; }
 	
 	/**
-	 * Gets a syntactic token from the given lexer/tokenizer using the type of rule provided 
-	 * @param rule Type of the analyzing rule 
-	 * @param lexer Lexer to analyze
-	 * @return Syntactic token from the given lexer/tokenizer using the type of rule provided 
-	 */
-	public Token analyze(String rule, Lexer lexer) {
-		Rule r = this.rule(rule);
-		return r.analyze(lexer);
-	}
-
-	/**
-	 * Gets a syntactic token from the given lexer/tokenizer (uses the main rule)
-	 * @param lexer Lexer to analyze
-	 * @return Syntactic token from the given lexer/tokenizer
+	 * Creates a token with the integer type
+	 * @param input Input source from which the token was built
+	 * @param start Starting position of the token in the input source
+	 * @param end Ending position (not included) of the token in the input source
+	 * @return Integer token
 	 */
 	@Override
-	public Token analyze(Lexer lexer) { return analyze(main,lexer); }
+	public Token match(String input, int start, int end){
+		Token t = super.match(input, start, end);
+		if(t.type().equals(type()) && !(t.value() instanceof Integer) ){
+			t.type(Token.ERROR);
+			t.value(type());
+		}
+		return t;
+	}
 }
