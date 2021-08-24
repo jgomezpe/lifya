@@ -44,9 +44,7 @@ import lifya.Token;
 import lifya.lexeme.Symbol;
 
 /**
- * <p>Title: Rule</p>
- *
- * <p>Description: Parsing rule</p>
+ * <p>Parsing rule</p>
  *
  */
 public abstract class Rule{	

@@ -39,9 +39,7 @@
 package lifya.generalized;
 
 /**
- * <p>Title: Encoder</p>
- *
- * <p>Description: Encodes a symbol to a character value</p>
+ * <p>Encodes a symbol to a character value</p>
  * @param <T> Type of the input symbols
  */
 public interface Encoder<T> {

@@ -39,9 +39,7 @@
 package lifya;
 
 /**
- * <p>Title: SyntacticParser</p>
- *
- * <p>Description: Abstract syntactic parser</p>
+ * <p>Abstract syntactic parser</p>
  *
  */
 public interface SyntacticParser{

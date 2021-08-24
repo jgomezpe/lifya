@@ -42,9 +42,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: ID</p>
- *
- * <p>Description: Parses ids: [_a-zA-Z][_a-zA-Z0-9]*</p>
+ * <p>Parses ids: [_a-zA-Z][_a-zA-Z0-9]*</p>
  *
  */
 public class ID<T> implements Lexeme<T>{

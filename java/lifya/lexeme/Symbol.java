@@ -44,9 +44,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: Symbol</p>
- *
- * <p>Description: Parses any of the characters/symbols in a symbol collection</p>
+ * <p>Parses any of the characters/symbols in a symbol collection</p>
  *
  */
 public class Symbol implements Lexeme<Character>{

@@ -43,9 +43,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: Lexeme</p>
- *
- * <p>Description: Abstract lexeme</p>
+ * <p>Abstract lexeme</p>
  * @param <T> Lexema type
  *
  */

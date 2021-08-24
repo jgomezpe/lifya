@@ -41,9 +41,7 @@ package lifya.lexeme;
 import lifya.Token;
 
 /**
- * <p>Title: IntParser</p>
- *
- * <p>Description: Parses an Integer</p>
+ * <p>Parses an Integer</p>
  *
  */
 public class IntParser extends lifya.lexeme.NumberParser{

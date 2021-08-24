@@ -42,9 +42,7 @@ import lifya.Lexer;
 import lifya.Token;
 
 /**
- * <p>Title: Empty</p>
- *
- * <p>Description: Empty rule</p>
+ * <p>Empty rule</p>
  *
  */
 public class Empty extends Rule{

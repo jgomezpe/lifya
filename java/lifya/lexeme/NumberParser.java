@@ -42,9 +42,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: NumberParser</p>
- *
- * <p>Description: Parses numbers (integer or real)</p>
+ * <p>Parses numbers (integer or real)</p>
  *
  */
 public class NumberParser implements Lexeme<Number>{

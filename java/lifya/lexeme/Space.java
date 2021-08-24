@@ -42,9 +42,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: Space</p>
- *
- * <p>Description: Parses spaces (' ', '\n', '\r', and '\t') </p>
+ * <p>Parses spaces (' ', '\n', '\r', and '\t') </p>
  *
  */
 public class Space implements Lexeme<String>{

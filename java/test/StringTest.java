@@ -43,9 +43,7 @@ import lifya.lexeme.StringParser;
 import lifya.stringify.Stringifier;
 
 /**
- * <p>Title: StringTest</p>
- *
- * <p>Description: Test String parser and stringify methods</p>
+ * <p>Test String parser and stringify methods</p>
  *
  */
 public class StringTest {

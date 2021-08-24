@@ -38,21 +38,19 @@
  */
 package lifya;
 
-import kompari.integer.L2HOrder;
+import kompari.integer.IntL2HOrder;
 import speco.array.Array;
 import speco.array.SortedSearch;
 import speco.object.Named;
 
 /**
- * <p>Title: Source</p>
- *
- * <p>Description: Considers a given String as an input for the language recognizer</p>
+ * <p>Considers a given String as an input for the language recognizer</p>
  *
  */
 public class Source extends Named{
 	protected String input;
 	protected Array<Integer> rows = new Array<Integer>();
-	protected SortedSearch<Integer> search = new SortedSearch<Integer>(new L2HOrder());
+	protected SortedSearch<Integer> search = new SortedSearch<Integer>(new IntL2HOrder());
 	
 	/**
 	 * Creates a source input from the given String

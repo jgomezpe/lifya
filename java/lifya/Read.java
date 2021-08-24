@@ -43,9 +43,7 @@ import java.io.IOException;
 import lifya.stringify.Stringifier;
 
 /**
- * <p>Title: Read</p>
- *
- * <p>Description: Read objects from an input source</p>
+ * <p>Read objects from an input source</p>
  * @param <T> Type of objects to read
  *
  */

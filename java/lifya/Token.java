@@ -41,9 +41,7 @@ package lifya;
 import speco.jxon.JXON;
 
 /**
- * <p>Title: Token</p>
- *
- * <p>Description: Language token (may be a lexeme, a syntactic rule, an object associated with a position in the source </p>
+ * <p>Language token (may be a lexeme, a syntactic rule, an object associated with a position in the source </p>
  *
  */
 public class Token extends Position{

@@ -42,9 +42,7 @@ import lifya.Lexer;
 import lifya.Token;
 
 /**
- * <p>Title: Options</p>
- *
- * <p>Description: A parser rule for selecting from multiple rules</p>
+ * <p>A parser rule for selecting from multiple rules</p>
  *
  */
 public class Options extends Rule{

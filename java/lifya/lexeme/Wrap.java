@@ -42,9 +42,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: Wrap</p>
- *
- * <p>Description: Associates a new tag to a Lexema processor (useful for multi-lexema languages)</p>
+ * <p>Associates a new tag to a Lexema processor (useful for multi-lexema languages)</p>
  *
  */
 public class Wrap implements Lexeme<Object>{

@@ -45,9 +45,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: BlobParser</p>
- *
- * <p>Description: Parses a Blob/Byte array using Base64</p>
+ * <p>Parses a Blob/Byte array using Base64</p>
  *
  */
 public class BlobParser implements Lexeme<byte[]>{ 

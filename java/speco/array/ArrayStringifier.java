@@ -39,9 +39,7 @@
 package speco.array;
 
 /**
- * <p>Title: ArrayStringifier</p>
- *
- * <p>Description: Stringify method for array of objects.</p>
+ * <p>Stringify method for array of objects.</p>
  *
  */
 public class ArrayStringifier {

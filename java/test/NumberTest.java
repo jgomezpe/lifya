@@ -42,9 +42,7 @@ import lifya.Token;
 import lifya.lexeme.NumberParser;
 
 /**
- * <p>Title: NumberTest</p>
- *
- * <p>Description: Test parsing and stringifying numbers</p>
+ * <p>Test parsing and stringifying numbers</p>
  *
  */
 public class NumberTest {

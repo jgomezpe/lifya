@@ -41,9 +41,7 @@ package lifya;
 import speco.array.Array;
 
 /**
- * <p>Title: LexerWrap</p>
- *
- * <p>Description: A Lexer built upon an Array of Lexema</p>
+ * <p>A Lexer built upon an Array of Lexema</p>
  *
  */
 public class LexerWrap extends Lexer{

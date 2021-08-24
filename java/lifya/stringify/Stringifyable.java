@@ -43,9 +43,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 
 /**
- * <p>Title: Stringifiable</p>
- *
- * <p>Description: An object that can be Stringified (stored) into a String</p>
+ * <p>An object that can be Stringified (stored) into a String</p>
  *
  */
 public interface Stringifyable {

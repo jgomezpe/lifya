@@ -51,9 +51,7 @@ import speco.object.JXONfyable;
 import speco.jxon.JXON;
 
 /**
- * <p>Title: Stringifier</p>
- *
- * <p>Description: Stringifies (Stores into a String) an object</p>
+ * <p>Stringifies (Stores into a String) an object</p>
  *
  */
 public class Stringifier {	

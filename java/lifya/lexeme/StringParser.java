@@ -42,9 +42,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: StringParser</p>
- *
- * <p>Description: Parses an String</p>
+ * <p>Parses an String</p>
  *
  */
 public class StringParser implements Lexeme<String>{

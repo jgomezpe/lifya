@@ -42,9 +42,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: Words</p>
- *
- * <p>Description: Parses any of the strings/words provided in the set of words,
+ * <p>Parses any of the strings/words provided in the set of words,
  *  useful for reserved words in a programming language.</p>
  *
  */

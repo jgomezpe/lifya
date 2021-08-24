@@ -45,9 +45,7 @@ import lifya.SyntacticParser;
 import lifya.Token;
 
 /**
- * <p>Title: LAHParser</p>
- *
- * <p>Description: Look a Head (LL1) parser. Checks the next Token in the token list to determine the Rule to use </p>
+ * <p>Look a Head parser. Checks the next Token in the token list to determine the Rule to use </p>
  *
  */
 public class LAHParser implements SyntacticParser{

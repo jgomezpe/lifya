@@ -39,9 +39,7 @@
 package lifya;
 
 /**
- * <p>Title: Language</p>
- *
- * <p>Description: Abstract definition of a language with lexer, parser and meaner</p>
+ * <p>Abstract definition of a language with lexer, parser and meaner</p>
  * @param <T> Type of meaningful object produced by the language
  */
 public class Language<T> implements Read<T>{

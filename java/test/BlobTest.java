@@ -43,9 +43,7 @@ import lifya.lexeme.BlobParser;
 import lifya.stringify.Stringifier;
 
 /**
- * <p>Title: BlobTest</p>
- *
- * <p>Description: Test parsing and stringifying blobs (byte arrays using Base64)</p>
+ * <p>Test parsing and stringifying blobs (byte arrays using Base64)</p>
  *
  */
 public class BlobTest {

@@ -42,9 +42,7 @@ import speco.jxon.JXON;
 import speco.object.JXONfyable;
 
 /**
- * <p>Title: Position</p>
- *
- * <p>Description: Position of the reading cursor in the input source</p>
+ * <p>Position of the reading cursor in the input source</p>
  *
  */
 public class Position implements JXONfyable{

@@ -45,9 +45,7 @@ import lifya.SyntacticParser;
 import lifya.Token;
 
 /**
- * <p>Title: GeneralizedLanguage</p>
- *
- * <p>Description: Abstract language processing not only on integer/character values </p>
+ * <p>Abstract language processing not only on integer/character values </p>
  * @param <S> Type of the input symbols
  * @param <T> Type of meaningful object produced by the language
  *

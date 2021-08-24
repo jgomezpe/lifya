@@ -41,9 +41,7 @@ package lifya.lexeme;
 import lifya.Token;
 
 /**
- * <p>Title: RealParser</p>
- *
- * <p>Description: Parses a real number (Double)</p>
+ * <p>Parses a real number (Double)</p>
  *
  */
 public class RealParser extends lifya.lexeme.NumberParser{

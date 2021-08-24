@@ -44,9 +44,7 @@ import lifya.Token;
 import speco.array.Array;
 
 /**
- * <p>Title: ListRule</p>
- *
- * <p>Description: A Parsing rule for lists</p>
+ * <p>A Parsing rule for lists</p>
  *
  */
 public class ListRule extends Rule{

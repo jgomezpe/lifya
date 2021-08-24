@@ -39,9 +39,7 @@
 package lifya;
 
 /**
- * <p>Title: Meaner</p>
- *
- * <p>Description: Gives meaning to parser trees/objects produced by the language parser</p>
+ * <p>Gives meaning to parser trees/objects produced by the language parser</p>
  *
  */
 public interface Meaner{

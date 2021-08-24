@@ -45,9 +45,7 @@ import lifya.Source;
 import lifya.Token;
 
 /**
- * <p>Title: Regex</p>
- *
- * <p>Description: Abstract class for parsing an object that satisfies a regular expression</p>
+ * <p>Abstract class for parsing an object that satisfies a regular expression</p>
  * @param <T> Type of objects being parsed
  */
 public abstract class Regex<T> implements Lexeme<T>{

@@ -45,9 +45,7 @@ import lifya.lexeme.Lexeme;
 import speco.array.Array;
 
 /**
- * <p>Title: LAHLexer</p>
- *
- * <p>Description: Look a Head (LL1) lexer. Checks the next character in the input to determine the Lexema to use </p>
+ * <p>Look a Head lexer. Checks the next character in the input to determine the Lexema to use </p>
  *
  */
 public class LAHLexer extends lifya.Lexer{

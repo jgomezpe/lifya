@@ -42,9 +42,7 @@ import lifya.lexeme.Space;
 import speco.array.Array;
 
 /**
- * <p>Title: Lexer (Tokenizer)</p>
- *
- * <p>Description: Language lexer</p>
+ * <p>Language lexer</p>
  *
  */
 public abstract class Lexer implements Read<Array<Token>>{

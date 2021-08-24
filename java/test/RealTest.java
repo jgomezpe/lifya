@@ -42,9 +42,7 @@ import lifya.Token;
 import lifya.lexeme.RealParser;
 
 /**
- * <p>Title: RealTest</p>
- *
- * <p>Description: Test parsing and stringifying real numbers</p>
+ * <p>Test parsing and stringifying real numbers</p>
  *
  */
 public class RealTest {
