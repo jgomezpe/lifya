@@ -1208,6 +1208,59 @@ class ListRule extends Rule{
 }
 
 /**
+ * <p>A Parsing rule for non empty lists</p>
+ *
+ */
+class NonEmptyListRule extends Rule{
+    /**
+     * Creates a non empty lists syntactic rule 
+     * @param type Type of the rule
+     * @param parser Syntactic parser using the rule
+     * @param item_rule Rule type of the elements of the list
+     * @param separator Elements separating character (default ',')
+     */ 
+    constructor(type, parser, item_rule, separator=',') {
+        super(type, parser)
+        this.item_rule = item_rule
+        this.TAG = "NELIST"
+        this.SEPARATOR = separator
+    }
+    
+    /**
+     * Determines if the rule can start with the given token (left character)
+     * @param t Token to analyze
+     * @return <i>true</i> If the rule can start with the given token <i>false</i> otherwise
+     */
+    startsWith(t) { return this.parser.rule(this.item_rule).startsWith(t); }
+    
+    /**
+     * Creates a rule token using the <i>current</i> token as first token to analyze
+     * @param lexer Lexer 
+     * @param current Initial token
+     * @return List rule token
+     */
+    analyze(lexer, current) {
+        if(!this.startsWith(current)) return current.toError()
+        var input = current.input()
+        var start = current.start()
+        var list = []
+        var t = this.parser.rule(this.item_rule).analyze(lexer, current)
+        if(t.isError()) return t
+        list.push(t)
+        current = lexer.next()
+        while(current!=null && this.check_symbol(current, this.SEPARATOR)) {
+            current = lexer.next()
+            t = this.parser.rule(this.item_rule).analyze(lexer, current)
+            if(t.isError()) return t
+            list.push(t)
+            current = lexer.next()
+        }
+        if(current != null) lexer.goback()
+        return this.token(input,start,list[list.length-1].end(),list)
+    }   
+}
+
+/**
  * A parser rule for selecting from multiple rules
  */
 class Options extends Rule{
