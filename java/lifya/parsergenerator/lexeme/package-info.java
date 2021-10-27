@@ -1,4 +1,6 @@
 /**
+ * <p>Lifya token type recognizers for parser generation.</p>
+ *
  * <p>Copyright: Copyright (c) 2019</p>
  *
  * <h3>License</h3>
@@ -36,38 +38,4 @@
  * (E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A> )
  * @version 1.0
  */
-package lifya;
-
-import java.io.IOException;
-
-import lifya.stringify.Stringifier;
-
-/**
- * <p>Read objects from an input source</p>
- * @param <T> Type of objects to read
- *
- */
-public interface Read<T> {	
-	/**
-	 * Reads an object from the input source 
-	 * @param input Symbol source
-	 * @return Object read from the symbol source
-	 * @throws IOException if the object could not be read
-	 */
-	@SuppressWarnings("unchecked")
-	default T get(Source input) throws IOException{
-		Token t = match(input);
-		if(t.isError()) {
-			input.error(t);
-			throw new IOException(Stringifier.apply(input.error()));
-		}
-		return (T)t.value();	
-	}
- 	
-	/**
-	 * Reads a token from the input source 
-	 * @param input Symbol source
-	 * @return Token read from the symbol source
-	 */
-	Token match(Source input);
-}
+package lifya.parsergenerator.lexeme;

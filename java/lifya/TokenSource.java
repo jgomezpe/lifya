@@ -38,89 +38,65 @@
  */
 package lifya;
 
-import speco.json.JSON;
-import speco.object.JSONfyable;
+import java.util.HashMap;
+
+import speco.array.Array;
 
 /**
- * <p>Position of the reading cursor in the input source</p>
+ * <p>Tokens source</p>
  *
  */
-public class Position implements JSONfyable{
-	/**
-	 * Source name TAG
-	 */
-	public static final String INPUT = "input";
-	
-	/**
-	 * Starting position TAG
-	 */
-	public static final String START = "start";
-	
-	/**
-	 * Row position TAG (when considering as a 2D position in the source)
-	 */
-	public static final String ROW = "row";
-	
-	/**
-	 * Column position TAG (when considering as a 2D position in the source)
-	 */	
-	public static final String COLUMN = "column";
+public class TokenSource{
+	protected Array<Token> tokens;
+	protected int pos=0;
+	protected HashMap<String, String> types = new HashMap<String, String>();
     
-	protected Source input;
-	protected int start;
-	
 	/**
-	 * Creates a position for the given source 
-	 * @param input Input source
-	 * @param start Absolute position on the source 
+	 * Creates a Tokenizer source from an Array of tokens
+	 * @param tokens Array of Tokens used for configuring a Tokenizer source
 	 */
-	public Position(Source input, int start){
-		this.input = input;
-		this.start = start;	
+	public TokenSource(Array<Token> tokens) {
+		this.tokens = tokens;
+		for( int i=0; i<tokens.size(); i++) this.types.put(tokens.get(i).type(), "");
 	}
-    
-	/**
-	 * Sets the absolute position
-	 * @param start Absolute position
-	 */
-	public void start(int start) { this.start = start; }
 	
 	/**
-	 * Gets the absolute position
-	 * @return Absolute position
+	 * Gets the input source
+	 * @return Input source
 	 */
-	public int start() { return start; }
+	public Source input() { return (tokens.size()>0)?tokens.get(0).input():null; }
     
 	/**
-	 * Shifts the absolute position a <i>delta</i> amount
-	 * @param delta delta moving of the absolute position
+	 * Current position in the tokens array source
+	 * @return Current position
 	 */
-	public void shift(int delta) { start+=delta; }
-
-	/**
-	 * Sets the position input source
-	 * @param input Position input source
-	 */
-	public void input(Source input) { this.input = input; }  
+	public int pos() { return pos; }
 	
 	/**
-	 * Gets the position source
-	 * @return Position source
+	 * Advances one token
+	 * @return New current token
 	 */
-	public Source input(){ return this.input; }
-
-    /**
-     * Gets a JSON version of the position
-     * @return JSON version  of the position
-     */
-	@Override
-	public JSON json(){
-		JSON json = new JSON();
-		json.set(INPUT, input.id());
-		json.set(START, start);
-		int[] pos = input.location(start);
-		json.set(ROW, pos[0]);
-		json.set(COLUMN, pos[1]);	
-		return json;
-	}  
+	public Token next() {
+		pos++;
+		if(pos>tokens.size()) pos=tokens.size();
+		return current();
+	}
+	
+	/**
+	 * Gets the current character 
+	 * @return Current character
+	 */
+	public Token current() { return (0<=pos && pos<tokens.size())?tokens.get(pos):null; }
+	
+	/**
+	 * Locates the token reading source
+	 * @param index New reading position
+	 * @return New current token
+	 */
+	public Token locate( int index ) {
+		if(-1<=index && index<=tokens.size()) {
+			pos = index;
+			return current();
+		}else return null;
+	}
 }

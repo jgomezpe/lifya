@@ -3,11 +3,11 @@ Java/Javascript components for (programming) language processing for the numtsen
 
 &nbsp;Java components require:
 
-&nbsp;kerno.jar, speco.jar, kompari.jar
+&nbsp;kompari.jar
 
 &nbsp;Available at <A HREF="https://github.com/jgomezpe/libs/">https://github.com/jgomezpe/libs/</A>
 
-&nbsp;Javascript components require:
+&nbsp;Javascript component requires:
 
 &nbsp;kompari.js
 
@@ -20,14 +20,13 @@ Java/Javascript components for (programming) language processing for the numtsen
 
 &nbsp;Java ready to use: <A HREF="https://github.com/jgomezpe/libs/lifya.jar">https://github.com/jgomezpe/libs/lifya.jar</A>
 
-&nbsp;Javascript ready to use: <A HREF="https://numtseng.com/modules/lifya.js">https://numtseng.com/modules/lifya.js</A>, and 
- <A HREF="https://numtseng.com/modules/lifya_wrap.js">https://numtseng.com/modules/lifya_wrap.js</A>
+&nbsp;Javascript ready to use: <A HREF="https://numtseng.com/modules/lifya.js">https://numtseng.com/modules/lifya.js</A>
 
 &nbsp;Java/Javascript source code: <A HREF="https://github.com/jgomezpe/lifya/">https://github.com/jgomezpe/lifya/</A>
 
-&nbsp;Java API documentation: <A HREF="https://numtseng.com/api/java/lifya/">https://numtseng.com/api/java/lifya/</A>
+&nbsp;Java API documentation: <A HREF="https://numtseng.com/api/lifya/java/">https://numtseng.com/api/lifya/java/</A>
 
-&nbsp;Javascript API documentation: <A HREF="https://numtseng.com/api/lifya/">https://numtseng.com/api/lifya/</A>
+&nbsp;Javascript API documentation: <A HREF="https://numtseng.com/api/lifya/js/">https://numtseng.com/api/lifya/js/</A>
 
 &nbsp;All rights reserved.
 

@@ -36,91 +36,26 @@
  * (E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A> )
  * @version 1.0
  */
-package lifya;
 
-import speco.json.JSON;
-import speco.object.JSONfyable;
+
+import java.io.IOException;
+
+import lifya.parsergenerator.ParserGenerator;
+import lifya.stringify.Stringifier;
 
 /**
- * <p>Position of the reading cursor in the input source</p>
+ * <p>Test String parser and stringify methods</p>
  *
  */
-public class Position implements JSONfyable{
-	/**
-	 * Source name TAG
-	 */
-	public static final String INPUT = "input";
-	
-	/**
-	 * Starting position TAG
-	 */
-	public static final String START = "start";
-	
-	/**
-	 * Row position TAG (when considering as a 2D position in the source)
-	 */
-	public static final String ROW = "row";
-	
-	/**
-	 * Column position TAG (when considering as a 2D position in the source)
-	 */	
-	public static final String COLUMN = "column";
-    
-	protected Source input;
-	protected int start;
-	
-	/**
-	 * Creates a position for the given source 
-	 * @param input Input source
-	 * @param start Absolute position on the source 
-	 */
-	public Position(Source input, int start){
-		this.input = input;
-		this.start = start;	
+public class StringTest {
+	public static void main(String[] args) {
+	    System.out.println("==============");
+	    String x= Stringifier.apply("Hello world! \u44ff"); 
+	    System.out.println(x);
+	    try {
+	    	System.out.println("==============");
+	    	String t = ParserGenerator.string(x,'"');
+	    	System.out.println(t);
+	    }catch(IOException e) { e.printStackTrace(); }
 	}
-    
-	/**
-	 * Sets the absolute position
-	 * @param start Absolute position
-	 */
-	public void start(int start) { this.start = start; }
-	
-	/**
-	 * Gets the absolute position
-	 * @return Absolute position
-	 */
-	public int start() { return start; }
-    
-	/**
-	 * Shifts the absolute position a <i>delta</i> amount
-	 * @param delta delta moving of the absolute position
-	 */
-	public void shift(int delta) { start+=delta; }
-
-	/**
-	 * Sets the position input source
-	 * @param input Position input source
-	 */
-	public void input(Source input) { this.input = input; }  
-	
-	/**
-	 * Gets the position source
-	 * @return Position source
-	 */
-	public Source input(){ return this.input; }
-
-    /**
-     * Gets a JSON version of the position
-     * @return JSON version  of the position
-     */
-	@Override
-	public JSON json(){
-		JSON json = new JSON();
-		json.set(INPUT, input.id());
-		json.set(START, start);
-		int[] pos = input.location(start);
-		json.set(ROW, pos[0]);
-		json.set(COLUMN, pos[1]);	
-		return json;
-	}  
 }

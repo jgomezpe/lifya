@@ -38,89 +38,67 @@
  */
 package lifya;
 
-import speco.json.JSON;
-import speco.object.JSONfyable;
+import java.io.IOException;
+
+import lifya.stringify.Stringifier;
+import speco.array.Array;
 
 /**
- * <p>Position of the reading cursor in the input source</p>
+ * <p>Abstract syntactic parser</p>
  *
  */
-public class Position implements JSONfyable{
-	/**
-	 * Source name TAG
-	 */
-	public static final String INPUT = "input";
+public abstract class Parser implements Read<Token>{
+	protected TokenSource lexer;
+	protected Tokenizer tokenizer;
 	
 	/**
-	 * Starting position TAG
+	 * Creates a syntactic parser using the given tokenizer
+	 * @param tokenizer Tokenizer
 	 */
-	public static final String START = "start";
+	public Parser(Tokenizer tokenizer) { this.tokenizer = tokenizer; }
 	
 	/**
-	 * Row position TAG (when considering as a 2D position in the source)
+	 * Creates a syntactic token (parser tree) from the list of tokens
+	 * @return Syntactic token
 	 */
-	public static final String ROW = "row";
+	public abstract Token analyze();
 	
 	/**
-	 * Column position TAG (when considering as a 2D position in the source)
-	 */	
-	public static final String COLUMN = "column";
-    
-	protected Source input;
-	protected int start;
-	
-	/**
-	 * Creates a position for the given source 
-	 * @param input Input source
-	 * @param start Absolute position on the source 
+	 * Reads an object from the input source (limited to the given starting and ending positions) 
+	 * @param input Symbol source
+	 * @return Syntactic token read from the symbol source
 	 */
-	public Position(Source input, int start){
-		this.input = input;
-		this.start = start;	
+	public Token match(Source input){
+		Token t = tokenizer.match(input); 
+		if( t.isError() ) return t;
+		@SuppressWarnings("unchecked")
+		Array<Token> tokens = (Array<Token>)t.value();
+		lexer = new TokenSource(tokens);
+		return analyze();
 	}
-    
-	/**
-	 * Sets the absolute position
-	 * @param start Absolute position
-	 */
-	public void start(int start) { this.start = start; }
 	
 	/**
-	 * Gets the absolute position
-	 * @return Absolute position
+	 * Determines if a type name is a token type or not
+	 * @param type type name to analyze
+	 * @return <i>true</i> If the type name represents a token type, <i>false</i> otherwise.
 	 */
-	public int start() { return start; }
-    
-	/**
-	 * Shifts the absolute position a <i>delta</i> amount
-	 * @param delta delta moving of the absolute position
-	 */
-	public void shift(int delta) { start+=delta; }
-
-	/**
-	 * Sets the position input source
-	 * @param input Position input source
-	 */
-	public void input(Source input) { this.input = input; }  
+	public boolean isToken(String type) { return tokenizer.isTokenType(type); }
+	
+	public Token current() { return lexer.current(); }
 	
 	/**
-	 * Gets the position source
-	 * @return Position source
+	 * Reads an object from the input source 
+	 * @param input Symbol source
+	 * @return Object read from the symbol source
+	 * @throws IOException if the object could not be read
 	 */
-	public Source input(){ return this.input; }
-
-    /**
-     * Gets a JSON version of the position
-     * @return JSON version  of the position
-     */
 	@Override
-	public JSON json(){
-		JSON json = new JSON();
-		json.set(INPUT, input.id());
-		json.set(START, start);
-		int[] pos = input.location(start);
-		json.set(ROW, pos[0]);
-		json.set(COLUMN, pos[1]);	
-		return json;
-	}  
+	public Token get(Source input) throws IOException{
+		Token t = match(input);
+		if(t.isError()) {
+			input.error(t);
+			throw new IOException(Stringifier.apply(input.error()));
+		}
+		return t;	
+	}
 }

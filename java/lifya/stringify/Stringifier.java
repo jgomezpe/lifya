@@ -41,14 +41,13 @@ package lifya.stringify;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 
-import lifya.lexeme.BlobParser;
 import speco.array.Array;
 import speco.array.ArrayStringifier;
 
 import java.util.HashMap;
 
-import speco.object.JXONfyable;
-import speco.jxon.JXON;
+import speco.object.JSONfyable;
+import speco.json.JSON;
 
 /**
  * <p>Stringifies (Stores into a String) an object</p>
@@ -131,19 +130,19 @@ public class Stringifier {
 	}
 
 	/**
-	 * Stringifies a JXON 
-	 * @param jxon JXON to be stringified
-	 * @return Stringified version of the JXON
+	 * Stringifies a JSON 
+	 * @param json JSON to be stringified
+	 * @return Stringified version of the JSON
 	 */
-	public static String apply(JXON jxon) {
+	public static String apply(JSON json) {
 		StringBuilder sb = new StringBuilder();
 		boolean flag = false;
 		sb.append('{');
-		for( String key:jxon.keys() ) {
+		for( String key:json.keys() ) {
 			if( flag ) sb.append(',');
 			sb.append(apply(key));
 			sb.append(':');
-			sb.append(apply(jxon.get(key)));
+			sb.append(apply(json.get(key)));
 			flag = true;
 		}
 		sb.append('}');
@@ -151,11 +150,11 @@ public class Stringifier {
 	}
     
 	/**
-	 * Stringifies a JXONfyable object 
-	 * @param jxon JXONfyable object to be stringified
-	 * @return Stringified version of the JXONfyable object
+	 * Stringifies a JSONfyable object 
+	 * @param json JSONfyable object to be stringified
+	 * @return Stringified version of the JSONfyable object
 	 */
-	public static String apply(JXONfyable jxon) { return apply(jxon.jxon()); }
+	public static String apply(JSONfyable json) { return apply(json.json()); }
     
 	/**
 	 * Stringifies an object
@@ -169,9 +168,9 @@ public class Stringifier {
 		if(obj instanceof String) return apply((String)obj);
 		if(obj instanceof Stringifyable) return apply((Stringifyable)obj);
 		if(obj instanceof Array) return apply((Array<?>)obj);
-		if(obj instanceof JXONfyable) return apply((JXONfyable)obj);
+		if(obj instanceof JSONfyable) return apply((JSONfyable)obj);
 		if(obj instanceof HashMap) return apply((HashMap<String,Object>)obj);
-		if(obj instanceof JXON) return apply((JXON)obj);
+		if(obj instanceof JSON) return apply((JSON)obj);
 		return obj.toString();
 	}
 
@@ -227,20 +226,8 @@ public class Stringifier {
 	 * @param blob Byte array/blob to stringify
 	 * @return Stringified version of the blob/byte array
 	 */
-	public static String apply(byte[] blob) { return apply(blob, ""+BlobParser.STARTER); }
-    
-	/**
-	 * Stringifies a blob (byte array) using Base64 and the provided character as starter for identifying a blob
-	 * @param blob Byte array/blob to stringify
-	 * @param STARTER Starter character for identifying a blob
-	 * @return Stringified version of the blob/byte array
-	 */
-	public static String apply(byte[] blob, String STARTER) {
+	public static String apply(byte[] blob) { 
 		Encoder enc = Base64.getMimeEncoder();
-		String txt = enc.encodeToString(blob);
-		StringBuilder sb = new StringBuilder(); 
-		sb.append(STARTER);
-		sb.append(txt);
-		return sb.toString();
+		return enc.encodeToString(blob);
 	}
 }

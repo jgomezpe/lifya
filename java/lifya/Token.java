@@ -38,13 +38,15 @@
  */
 package lifya;
 
-import speco.jxon.JXON;
+import speco.array.Array;
+import speco.json.JSON;
 
 /**
  * <p>Language token (may be a lexeme, a syntactic rule, an object associated with a position in the source </p>
  *
  */
 public class Token extends Position{
+	
 	/**
 	 * Token typ'se TAG
 	 */
@@ -70,14 +72,14 @@ public class Token extends Position{
 	protected Object value;
     
 	/**
-	 * Creates a token
+	 * Creates an error token
 	 * @param input Input source from which the token was built
 	 * @param start Starting position of the token in the input source
 	 * @param end Ending position (not included) of the token in the input source
-	 * @param value Value stored by the token
 	 */
-	public Token(Source input, int start, int end, Object value){
-		this(ERROR, input, start, end, value);
+	public Token(Source input, int start, int end){
+		this(input, start, end, ERROR, input.substring(start, Math.min(Math.max(end,start+1), input.length())));
+		input.error(this);
 	}
 
 	/**
@@ -88,7 +90,7 @@ public class Token extends Position{
 	 * @param end Ending position (not included) of the token in the input source
 	 * @param value Value stored by the token
 	 */
-	public Token(String type, Source input, int start, int end, Object value){
+	public Token(Source input, int start, int end, String type, Object value){
 		super(input,start);
 		this.type = type;
 		this.end = end;
@@ -99,7 +101,7 @@ public class Token extends Position{
 	 * Computes the length (number of symbols) consumed by the token 
 	 * @return Length (number of symbols) consumed by the token
 	 */
-	public int size(){ return this.end-this.start; }
+	public int length(){ return this.end-this.start; }
     
 	/**
 	 * Gets the ending position (not included) of the token in the input source
@@ -107,6 +109,11 @@ public class Token extends Position{
 	 */
 	public int end() { return end; }
     
+	/**
+	 * Sets the end of the token
+	 * @param end End position of the token
+	 */
+	public void end(int end) { this.end = end; }
 	
 	/**
 	 * Shifts the absolute position a <i>delta</i> amount
@@ -119,12 +126,12 @@ public class Token extends Position{
 	}
 
     /**
-     * Gets a JXON version of the token
-     * @return JXON version  of the token
+     * Gets a JSON version of the token
+     * @return JSON version  of the token
      */
 	@Override
-	public JXON jxon(){
-		JXON json = super.jxon();
+	public JSON json(){
+		JSON json = super.json();
 		json.set(END, end);
 		json.set(VALUE,value.toString());
 		json.set(TYPE,type);
@@ -155,17 +162,42 @@ public class Token extends Position{
 	 */
 	public void value( Object value ) { this.value = value; }
     
-	public String toString() { return "["+type+','+start+','+end+','+value+']'; }
+	public String toString() { 
+		return print(0); 
+	}
     
 	/**
 	 * Converts the token to an error version of it
 	 * @return Error version of the token
 	 */
-	public Token toError() { return new Token(input,start,end,type()); }
+	public Token toError() { return new Token(input,start,end); }
     
 	/**
 	 * Determines if it is an error token or not 
 	 * @return <i>true</i> if an error token, <i>false</i> otherwise 
 	 */
 	public boolean isError() { return type()==ERROR; }
+	
+	protected String print( int tab ) {
+		StringBuilder sb = new StringBuilder();
+		Object obj = value();
+		if( obj instanceof Array ) {
+			for( int k=0; k<tab; k++ ) sb.append(' ');
+			sb.append(type());
+			@SuppressWarnings({ "unchecked" })
+			Array<Token> v = (Array<Token>)obj;
+			for( int i=0; i<v.size(); i++ ) {
+				sb.append('\n');
+				sb.append(v.get(i).print(tab+1));
+			}
+		}else {
+			for( int k=0; k<tab; k++ ) sb.append(' ');
+			sb.append("["+type+','+start+','+end+','+value+']');
+			if(obj instanceof Token) {
+				sb.append('\n');
+				sb.append(((Token)obj).print(tab+1));
+			}
+		}
+		return sb.toString();
+	}
 }

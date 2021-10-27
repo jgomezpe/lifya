@@ -36,91 +36,58 @@
  * (E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A> )
  * @version 1.0
  */
-package lifya;
+package lifya.generic.lexeme;
 
-import speco.json.JSON;
-import speco.object.JSONfyable;
+import lifya.Read;
+import lifya.Source;
+import lifya.Token;
 
 /**
- * <p>Position of the reading cursor in the input source</p>
+ * <p>Abstract token type recognizer</p>
  *
  */
-public class Position implements JSONfyable{
-	/**
-	 * Source name TAG
-	 */
-	public static final String INPUT = "input";
+public abstract class Lexeme implements Read<String>{
+	
+	protected String type;
 	
 	/**
-	 * Starting position TAG
+	 * Creates a token type recognizer
+	 * @param type Token type
 	 */
-	public static final String START = "start";
+	public Lexeme(String type) { this.type = type; }
 	
 	/**
-	 * Row position TAG (when considering as a 2D position in the source)
+	 * Determines if the token type can start with the given character
+	 * @param c Character to analyze
+	 * @return <i>true</i> If the token type can start with the given character <i>false</i> otherwise
 	 */
-	public static final String ROW = "row";
+	public abstract boolean startsWith(char c);
+
+	/**
+	 * Gets the type of token 
+	 * @return Type of token 
+	 */
+	public String type() { return type; }
 	
 	/**
-	 * Column position TAG (when considering as a 2D position in the source)
-	 */	
-	public static final String COLUMN = "column";
-    
-	protected Source input;
-	protected int start;
-	
-	/**
-	 * Creates a position for the given source 
-	 * @param input Input source
-	 * @param start Absolute position on the source 
+	 * Creates an error token with the token  type
+	 * @param input Input source from which the token was built
+	 * @param start Starting position of the token in the input source
+	 * @return Error token with the token type
 	 */
-	public Position(Source input, int start){
-		this.input = input;
-		this.start = start;	
+	public Token error(Source input, int start) {
+		input.locate(start);
+		return new Token(input,start,input.pos());
 	}
-    
-	/**
-	 * Sets the absolute position
-	 * @param start Absolute position
-	 */
-	public void start(int start) { this.start = start; }
 	
 	/**
-	 * Gets the absolute position
-	 * @return Absolute position
+	 * Creates a token with the token  type
+	 * @param input Input source from which the token was built
+	 * @param start Starting position of the token in the input source
+	 * @param value Value stored by the token
+	 * @return Token
 	 */
-	public int start() { return start; }
-    
-	/**
-	 * Shifts the absolute position a <i>delta</i> amount
-	 * @param delta delta moving of the absolute position
-	 */
-	public void shift(int delta) { start+=delta; }
-
-	/**
-	 * Sets the position input source
-	 * @param input Position input source
-	 */
-	public void input(Source input) { this.input = input; }  
-	
-	/**
-	 * Gets the position source
-	 * @return Position source
-	 */
-	public Source input(){ return this.input; }
-
-    /**
-     * Gets a JSON version of the position
-     * @return JSON version  of the position
-     */
-	@Override
-	public JSON json(){
-		JSON json = new JSON();
-		json.set(INPUT, input.id());
-		json.set(START, start);
-		int[] pos = input.location(start);
-		json.set(ROW, pos[0]);
-		json.set(COLUMN, pos[1]);	
-		return json;
-	}  
+	public Token token(Source input, int start, String value) {
+		return new Token(input,start,input.pos(),type(),value);
+	}
 }

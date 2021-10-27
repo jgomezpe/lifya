@@ -39,67 +39,33 @@
 package lifya;
 
 /**
- * <p>Abstract definition of a language with lexer, parser and meaner</p>
+ * <p>Abstract definition of a language with parser and meaner</p>
  * @param <T> Type of meaningful object produced by the language
  */
-public class Language<T> implements Read<T>{
-	/**
-	 * Language lexer
-	 */
-	protected Lexer lexer;
-	
+public abstract class Language<T> implements Read<T>{
 	/**
 	 * Language syntactic parser
 	 */
-	protected SyntacticParser parser;
+	protected Parser parser;
 	
 	/**
-	 * Language semantic meaner
-	 */
-	protected Meaner meaner;
-
-	/**
-	 * Creates a language with the given lexer, parser, and meaner
-	 * @param lexer Language lexer
+	 * Creates a language with the given parser
 	 * @param parser Language syntactic parser
-	 * @param meaner Language semantic meaner
 	 */
-	public Language( Lexer lexer, SyntacticParser parser, Meaner meaner ){
-		this.lexer = lexer;
-		this.parser = parser;
-		this.meaner = meaner;
-	}
+	public Language( Parser parser ){ this.parser = parser; }
+	
+	/**
+	 * 
+	 * @param t Creates an object with meaning
+	 * @return Semantic token (from syntactic token)
+	 */
+	public abstract Token mean(Token t);
 	
 	/**
 	 * Reads a semantic token from the input source starting at the position given up to the ending position
 	 * @param input Symbol source
-	 * @param start Starting position for reading a token
-	 * @param end Ending position for reading a token (not included)
 	 * @return Semantic token read from the source
 	 */
 	@Override
-	public Token match(Source input, int start, int end) {
-		lexer.init(input, start, end);
-		Token t = parser.analyze(lexer);
-		if(!t.isError()) t = meaner.apply(t);
-		return t;
-	}
-	
-	/**
-	 * Gets the Language semantic meaner
-	 * @return Language semantic meaner
-	 */
-	public Meaner meaner() { return meaner; }
-	
-	/**
-	 * Gets the Language syntactic parser
-	 * @return Language syntactic parser
-	 */
-	public SyntacticParser parser() { return parser; }
-	
-	/**
-	 * Gets the Language lexer
-	 * @return Language lexer
-	 */
-	public Lexer lexer() { return lexer; }
+	public Token match(Source input) { return mean(parser.match(input)); }
 }

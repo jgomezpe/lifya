@@ -36,91 +36,50 @@
  * (E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A> )
  * @version 1.0
  */
-package lifya;
+package lifya.generic.lexeme;
 
-import speco.json.JSON;
-import speco.object.JSONfyable;
+import java.util.HashMap;
+
+import lifya.Source;
+import lifya.Token;
 
 /**
- * <p>Position of the reading cursor in the input source</p>
+ * <p>Parses any of the characters/symbols in a symbol collection</p>
  *
  */
-public class Position implements JSONfyable{
-	/**
-	 * Source name TAG
-	 */
-	public static final String INPUT = "input";
-	
-	/**
-	 * Starting position TAG
-	 */
-	public static final String START = "start";
-	
-	/**
-	 * Row position TAG (when considering as a 2D position in the source)
-	 */
-	public static final String ROW = "row";
-	
-	/**
-	 * Column position TAG (when considering as a 2D position in the source)
-	 */	
-	public static final String COLUMN = "column";
+public class Symbol extends Lexeme{	
+	protected HashMap<Character, Character> table = new HashMap<Character, Character>();
     
-	protected Source input;
-	protected int start;
-	
 	/**
-	 * Creates a position for the given source 
-	 * @param input Input source
-	 * @param start Absolute position on the source 
+	 * Creates a parser for a set of symbols
+	 * @param type Type for the symbols lexema
+	 * @param symbols Symbols that will be considered in the lexema
 	 */
-	public Position(Source input, int start){
-		this.input = input;
-		this.start = start;	
+	public Symbol(String type, String symbols){
+		super(type);
+		for( int i=0; i<symbols.length(); i++ ) table.put(symbols.charAt(i),symbols.charAt(i));
 	}
-    
+ 	
 	/**
-	 * Sets the absolute position
-	 * @param start Absolute position
+	 * Creates a token with the symbol type
+	 * @param input Input source from which the token was built
+	 * @return Symbol token
 	 */
-	public void start(int start) { this.start = start; }
-	
-	/**
-	 * Gets the absolute position
-	 * @return Absolute position
-	 */
-	public int start() { return start; }
-    
-	/**
-	 * Shifts the absolute position a <i>delta</i> amount
-	 * @param delta delta moving of the absolute position
-	 */
-	public void shift(int delta) { start+=delta; }
-
-	/**
-	 * Sets the position input source
-	 * @param input Position input source
-	 */
-	public void input(Source input) { this.input = input; }  
-	
-	/**
-	 * Gets the position source
-	 * @return Position source
-	 */
-	public Source input(){ return this.input; }
-
-    /**
-     * Gets a JSON version of the position
-     * @return JSON version  of the position
-     */
 	@Override
-	public JSON json(){
-		JSON json = new JSON();
-		json.set(INPUT, input.id());
-		json.set(START, start);
-		int[] pos = input.location(start);
-		json.set(ROW, pos[0]);
-		json.set(COLUMN, pos[1]);	
-		return json;
-	}  
+	public Token match(Source input) {
+		if(startsWith(input.current())) {
+			char c = input.current();
+			input.next();
+			return token(input,input.pos()-1,""+c);
+		}
+		else return error(input,input.pos());
+	}
+	
+	/**
+	 * Determines if the symbol lexeme can start with the given character (a character in the set)
+	 * @param c Character to analyze
+	 * @return <i>true</i> If the lexeme can start with the given character <i>false</i> otherwise
+	 */
+	@Override
+	public boolean startsWith(char c) { return table.containsKey(c); }
 }

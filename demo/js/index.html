@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type='text/javascript' src='https://numtseng.com/modules/base64.js'></script> 
+    <script type='text/javascript' src='https://numtseng.com/modules/kompari.js'></script> 
+    <script type='text/javascript' src='lifya.js'></script> 
+</head>
+
+<body>   
+<div id='main' style='height:100%;width:100%'></div>
+<script>
+    function blob_test() { 
+        var base64 = "SGVsbG8gV29ybGQhIDIwMjA="
+        var blob = ParserGenerator.blob(base64)
+        return base64 + "\n" + Base64.encode(blob) + "\n" + Stringifier.apply(blob)
+    }
+
+    function integer_test() {
+        console.log("==============");
+        var t = ParserGenerator.integer("123,ww")
+        console.log(t)
+        console.log("==============")
+        t = ParserGenerator.integer("123.3e-2")
+        console.log(t)
+        console.log("==============")
+        t = ParserGenerator.integer("123+4");
+        console.log(t)
+        console.log("==============")
+        t = ParserGenerator.integer("xx,456,ww");
+        console.log(t)
+    }
+    
+    function real_test() {
+        try {
+            console.log("==============")
+            var t = ParserGenerator.real("123,ww")
+            console.log(t)
+            console.log("==============")
+            t = ParserGenerator.real("123.3e-2")
+            console.log(t)
+            console.log("==============")
+            t = ParserGenerator.real("123+4")
+            console.log(t)
+            console.log("==============")
+            t = ParserGenerator.real("xx,456,ww")
+            console.log(t)
+        }catch(e) { console.log('Error'+e) }
+    } 
+    
+    function string_test() {
+        console.log("==============")
+        var x = Stringifier.apply("Hello world! \u44ff")
+        console.log(x)
+        try {
+            console.log("==============");
+            var t = ParserGenerator.string(x,'"')
+            console.log(t)
+        }catch(e) { console.log('Error:'+e) }
+    }
+    
+    function generator_tokenizer_test() { 
+        var code="\\d+ (\\.\\d+)? ([e-E|r] (\\+|\\-)? \\d+)?"
+        var tokenizer = new GeneratorTokenizer(false)
+        try {
+            console.log("***********")
+            console.log(code)
+            var tokens = tokenizer.get(new Source("noname",code))
+            console.log(tokens.length)
+            for( var i=0; i<tokens.length; i++ ) console.log(tokens[i])
+        } catch (e) { console.log('Error..'+e) }
+    }
+    
+    function generator_parser_test() { 
+        var code="[\\+|\\-]?\\d+ (\\.\\d+)? ({e|er|E}-[\\+|\\-|\\*]?\\d+)?"
+        //String code="\"([^\\\\]|\\\\([\\\\nrt\"]|u[A-Fa-f\\d][A-Fa-f\\d][A-Fa-f\\d][A-Fa-f\\d]))*\""
+        console.log(code)
+        var parser = new GeneratorParser(false)
+        try {
+            console.log("************************************")
+            var t = parser.get(new Source("noname",code))
+            console.log(t.toString())
+        } catch (e) { console.log('Error..'+e) }
+    }
+
+    function generator_meaner_test() { 
+        var code="[\\+|\\-]?\\d+ (\\.\\d+)? ({e|E}[\\+|\\-]?\\d+)?"
+        //String code="\"([^\\\\]|\\\\([\\\\nrt\"]|u[A-Fa-f\\d][A-Fa-f\\d][A-Fa-f\\d][A-Fa-f\\d]))*\"";
+        //String code = "%$"
+        console.log(code)
+        try {
+            var lexeme = new GeneratorLexeme("test",code)
+            console.log("************************************")
+            console.log(lexeme.startsWith('"'))
+            console.log(lexeme.startsWith('5'))
+            console.log(lexeme.startsWith('+'))
+            console.log(lexeme.startsWith('-'))
+            console.log("************************************")
+            //console.log(lexeme.match(new Source("anonymous", "%hello\n489.34e-2-34e-12rrr")))
+            console.log(lexeme.match(new Source("anonymous", "489.34e-2-34e-12rrr")).value)
+        } catch (e) { console.log('Error..'+e) }
+    }
+    
+    
+    test_lexer="% A lexer \n<number> = [\\+|\\-]?\\d+(\\.\\d+)?([e|E][\\+|\\-]?\\d+)?\n<%comment> = \\%$\n<%space> = [\\n|\\r|\\t|\\s]+\n"
+    test_parser="% A parser \n<list> :- {\\:} <number> <number>.\n"
+    code=test_lexer+"\n"+test_parser
+    
+    function tokenizer_test() {
+        tokenizer = new GeneratorTokenizer(true)
+        try {
+            console.log("*****Lexer******")
+            console.log(code)
+            var s = new Source("language test source",code)
+            var tokens = tokenizer.get(s)
+            console.log("*****Tokenization******")
+            console.log(tokens.length)
+            for( var i=0; i<tokens.length; i++ ) console.log(tokens[i])
+    
+        } catch (e) { console.log('Error' + e) }
+    }
+    
+    function parser_test() {
+        parser = new GeneratorParser(true)
+        try {
+            console.log("****************Parser********************")
+            console.log(code)
+            var input = new Source("language test source",code)
+            var t = parser.get(input)
+            console.log(t.toString())
+            if(parser.current() != null ) throw new IOException(Stringifier.apply(parser.current().toError()))
+        } catch (e) { console.log('Error' + e) }
+    }
+
+    function language_test() {
+        //try {
+            console.log("****************Language********************")
+            console.log(code)
+            var parser = ParserGenerator.parser(code, "<list>")
+            var program = "123.45 : 345.86e-2 : \n 76.77"
+            console.log("*****Testing with****")
+            console.log(program)
+            var source = new Source("view", program)
+            var t = parser.get(source)
+            console.log("****************Produced tree********************")
+            console.log(t.toString())
+            t = ProcessDerivationTree.eliminate_lambda(t)
+            t = ProcessDerivationTree.eliminate_token(t, "symbol", null)
+            t = ProcessDerivationTree.reduce_size_1(t)
+            t = ProcessDerivationTree.reduce_exp(t, "<list>")
+            console.log("****************Processed tree********************")              
+            console.log(t.toString())
+        //} catch (e) { console.log('Error' + e) }
+    } 
+
+    // You can try any of the previous functions here, we just set the last one as default.
+    document.getElementById('main').innerHTML = language_test()
+</script>   
+</body>
+
+</html>
