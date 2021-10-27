@@ -285,8 +285,8 @@ class Source {
       
     /**
      * Determines if the index is a valid one (start&lt;=index && index&lt;end)
-     * @param index
-     * @return
+     * @param index Position to analyze
+     * @return <i>true</i> if the position is valid, <i>false</i> otherwise
      */
     valid(index) { return (this.start<=index && index<this.end) }
     
