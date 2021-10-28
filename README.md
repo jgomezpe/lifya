@@ -1,34 +1,31 @@
 # lifya
-Java/Javascript components for (programming) language processing for the numtseng infrastructure. 
+Language processing for the numtseng infrastructure. 
 
-&nbsp;Java components require:
-
-&nbsp;kompari.jar
-
-&nbsp;Available at <A HREF="https://github.com/jgomezpe/libs/">https://github.com/jgomezpe/libs/</A>
-
-&nbsp;Javascript component requires:
-
-&nbsp;kompari.js
-
-&nbsp;Available at <A HREF="https://numtseng.com/modules/">https://numtseng.com/modules/</A>
+&nbsp;Source code: <A HREF="https://github.com/jgomezpe/lifya/">https://github.com/jgomezpe/lifya/</A>
 
 <h3>Version 1.0</h3>
 <h3>Copyright (c)</h3>
 &nbsp;Author: <A HREF="https://disi.unal.edu.co/~jgomezpe/"> Jonatan Gomez-Perdomo </A>
+
 &nbsp;E-mail: <A HREF="mailto:jgomezpe@unal.edu.co">jgomezpe@unal.edu.co</A>
 
-&nbsp;Java ready to use: <A HREF="https://github.com/jgomezpe/libs/lifya.jar">https://github.com/jgomezpe/libs/lifya.jar</A>
-
-&nbsp;Javascript ready to use: <A HREF="https://numtseng.com/modules/lifya.js">https://numtseng.com/modules/lifya.js</A>
-
-&nbsp;Java/Javascript source code: <A HREF="https://github.com/jgomezpe/lifya/">https://github.com/jgomezpe/lifya/</A>
-
-&nbsp;Java API documentation: <A HREF="https://numtseng.com/api/lifya/java/">https://numtseng.com/api/lifya/java/</A>
-
-&nbsp;Javascript API documentation: <A HREF="https://numtseng.com/api/lifya/js/">https://numtseng.com/api/lifya/js/</A>
-
 &nbsp;All rights reserved.
+
+<h3>Java</h3>
+
+&nbsp;Ready to use: <A HREF="https://github.com/jgomezpe/libs/lifya.jar">https://github.com/jgomezpe/libs/lifya.jar</A>
+
+&nbsp;API documentation: <A HREF="https://numtseng.com/api/lifya/java/">https://numtseng.com/api/lifya/java/</A>
+
+&nbsp;Compilation requires kompari.jar available at <A HREF="https://github.com/jgomezpe/libs/">https://github.com/jgomezpe/libs/</A>
+
+<h3>JavaScript</h3>
+
+&nbsp;Ready to use: <A HREF="https://numtseng.com/modules/lifya.js">https://numtseng.com/modules/lifya.js</A>
+
+&nbsp;Requires kompari.js available at <A HREF="https://numtseng.com/modules/">https://numtseng.com/modules/</A>
+
+&nbsp;API documentation: <A HREF="https://numtseng.com/api/lifya/js/">https://numtseng.com/api/lifya/js/</A>
 
 <h3>Licence</h3>
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
