@@ -37,23 +37,23 @@ public class GeneratorLanguage extends Language<GenericParser>{
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected Tokenizer tokenizer(Token lexemes, Lexeme symbols) {
+		Array<Token> a;
 		Lexeme[] lexeme;
-		int n;
+		int start = (symbols!=null)?1:0;
 		if(lexemes.value() instanceof Array) {
-			@SuppressWarnings("unchecked")
-			Array<Token> a = (Array<Token>)lexemes.value();
-			n = a.size();
-			lexeme = new Lexeme[n+((symbols!=null)?1:0)];
+			a = (Array<Token>)lexemes.value();
+			int n = a.size();
+			lexeme = new Lexeme[n+start];
 			for( int i=0; i<n; i++)
-				lexeme[i] = lexeme(a.get(i));
+				lexeme[i+start] = lexeme(a.get(i));
 		}else {
-			n=1;
-			lexeme = new Lexeme[n+((symbols!=null)?1:0)];
-			lexeme[0] = lexeme(lexemes);
+			lexeme = new Lexeme[start+1];
+			lexeme[start] = lexeme(lexemes);
 		}
-		if(symbols!=null) lexeme[n] = symbols;
-				
+		if(start==1) lexeme[0] = symbols;
+		
 		int c = 0;
 		for( int i=0; i<lexeme.length; i++) if(lexeme[i].type().charAt(1)=='%') c++;
 
@@ -273,13 +273,13 @@ public class GeneratorLanguage extends Language<GenericParser>{
 				Array<String> opers = new Array<String>();
 				Array<String> opers_type = new Array<String>();
 				for(String op:p.keySet()) {
-					if(!symbols.containsKey(op)) {
+					//if(!symbols.containsKey(op)) {
 						String key = ParserGenerator.escape_all(op);
 						symbols.put(op,p.get(op));
 						opers.add(key);
 						opers_type.add(GeneratorConstants.CHAR);
 						pf.put(key,p.get(op));
-					}
+					//}
 				}
 				rules.add(new DisjointRule(type+GeneratorConstants.OPER, opers_type, opers));
 				String[] ftype = (String[])e[3];

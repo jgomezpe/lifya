@@ -99,6 +99,7 @@ class Parser extends Read{
     constructor(tokenizer) { 
         super()
         this.tokenizer = tokenizer 
+        this.leftover = false
     }
     
     /**
@@ -116,7 +117,9 @@ class Parser extends Read{
         var t = this.tokenizer.match(input) 
         if( t.isError() ) return t
         this.lexer = new TokenSource(t.value)
-        return this.analyze()
+        t = this.analyze()
+        if(!this.leftover && this.lexer.current()!=null) t = this.lexer.current().toError()
+        return t
     }
     
     /**
@@ -2037,19 +2040,17 @@ class GeneratorLanguage extends Language{
     }
     
     tokenizer(lexemes, symbols) {
-        var lexeme
+        var lexeme = []
+        if( symbols != null ) lexeme.push(symbols)
         var n
         if(Array.isArray(lexemes.value)) {
             var a = lexemes.value
             n = a.length
-            lexeme = []
             for( var i=0; i<n; i++)
                 lexeme.push(this.lexeme(a[i]))
         }else {
-            n=1
-            lexeme = [this.lexeme(lexemes)]
+            lexeme.push(this.lexeme(lexemes))
         }
-        if(symbols!=null) lexeme.push(symbols)
                 
         var removable = []
         for( var i=0; i<lexeme.length; i++) if(lexeme[i].type.charAt(1)=='%') removable.push(lexeme[i].type)   
@@ -2253,13 +2254,13 @@ class GeneratorLanguage extends Language{
             var opers = []
             var opers_type = []
             for(var op in p) {
-                if(symbols[op] === undefined) {
+                //if(symbols[op] === undefined) {
                     var key = ParserGenerator.escape_all(op)
                     symbols[op] = p[op]
                     opers.push(key)
                     opers_type.push(GeneratorConstants.CHAR)
                     pf[key] = p[op]
-               }
+               //}
             }
             rules.push(new DisjointRule(type+GeneratorConstants.OPER, opers_type, opers))
             var ftype = e[3]

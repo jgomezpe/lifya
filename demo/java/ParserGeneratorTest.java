@@ -5,6 +5,7 @@ import java.io.IOException;
 import lifya.Parser;
 import lifya.Source;
 import lifya.Token;
+import lifya.Tokenizer;
 import lifya.parsergenerator.ParserGenerator;
 import lifya.parsergenerator.ProcessDerivationTree;
 import lifya.parsergenerator.language.GeneratorParser;
@@ -56,7 +57,16 @@ public class ParserGeneratorTest {
 				System.out.println("*****Testing with****");
 				System.out.println(program);
 				Source source = new Source("view", program);
-				Token t = parser.get(source);
+				System.out.println("*****Tokenizer****");
+				Tokenizer tok = parser.tokenizer();
+				Token t = tok.match(source);
+				@SuppressWarnings("unchecked")
+				Array<Token> a = (Array<Token>)t.value();
+				for(int i=0; i<a.size(); i++) {
+					System.out.println(a.get(i));
+				}
+				source = new Source("view", program);
+				t = parser.get(source);
 				System.out.println("****************Produced tree********************");
 				System.out.println(t);
 				t = ProcessDerivationTree.eliminate_lambda(t);

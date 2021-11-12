@@ -50,12 +50,21 @@ import speco.array.Array;
 public abstract class Parser implements Read<Token>{
 	protected TokenSource lexer;
 	protected Tokenizer tokenizer;
+	protected boolean leftover = false;
 	
 	/**
 	 * Creates a syntactic parser using the given tokenizer
 	 * @param tokenizer Tokenizer
 	 */
 	public Parser(Tokenizer tokenizer) { this.tokenizer = tokenizer; }
+	
+	/**
+	 * Indicates to the parser if can generate leftovers or not (i.e. if the parser must consume all tokens or not)
+	 * @param leftover A <i>true</i> value indicates that parser can produces leftovers (may not consume all tokens), <i>false</i> otherwise
+	 */
+	public void leftover(boolean leftover) { 
+		this.leftover = leftover;
+	}
 	
 	/**
 	 * Creates a syntactic token (parser tree) from the list of tokens
@@ -74,7 +83,9 @@ public abstract class Parser implements Read<Token>{
 		@SuppressWarnings("unchecked")
 		Array<Token> tokens = (Array<Token>)t.value();
 		lexer = new TokenSource(tokens);
-		return analyze();
+		t = analyze();
+		if(!leftover && lexer.current()!=null) t = lexer.current().toError();
+		return t;
 	}
 	
 	/**
@@ -101,4 +112,10 @@ public abstract class Parser implements Read<Token>{
 		}
 		return t;	
 	}
+	
+	/**
+	 * Gets the tokenizer used by the parser
+	 * @return Tokenizer used by the parser
+	 */
+	public Tokenizer tokenizer() { return tokenizer; }
 }
