@@ -103,7 +103,7 @@ Language processing for the numtseng infrastructure.
      <h4>Rules</h4>
      <p>Parsing rules can be conventional rules or expression rules.</p>
      <h5>Conventional Rules</h5>
-     <p>Defined in a similar fashion to the token recognizers, but including rule and token recognizer ids.
+     <p>Defined in a similar fashion to the token recognizers, but including rule and token recognizer ids, and finished with . symbol.
      <ul>
      <li> <i>*</i> : zero or more times the component. For example, <i>doom*</i> and <i>&lt;number&gt;*</i> indicates zero or more times the word <i>doom</i> and zero or more times the component (rule or token recognizer) <i>&lt;number&gt;</i>, respectively.</li>
      <li> <i>+</i> : one or more times the component. For example, <i>doom+</i> and <i>&lt;number&gt;+</i> indicates one or more times the word <i>doom</i> and one or more times the component (rule or token recognizer) <i>&lt;number&gt;</i>, respectively.</li>
@@ -113,11 +113,11 @@ Language processing for the numtseng infrastructure.
      </ul> 
      <p>Conventional rules are defined as <i>&lt;id&gt; = regular_body</i>. For example, a rule for list of
      numbers separated by commas may be defined as follows:</p>
-     <p> <i>&lt;list&gt; :- &lt;list&gt; (, &lt;list&gt;)*</i> </p>
+     <p> <i>&lt;list&gt; :- &lt;list&gt; (, &lt;list&gt;)*.</i> </p>
      <h5>Expression Rules</h5>
      <p>Rules for ambiguous expressions with operators precedence. For example, an expression for unsigned numbers
      may be defined as follows:</p>
-     <p> <i>&lt;exp&gt; :- {&#94;} {\*,/} {\+,\-} &lt;number&gt; &lt;unsignnumber&gt; </i> </p>
+     <p> <i>&lt;exp&gt; :- {&#94;} {\*,/} {\+,\-} &lt;number&gt; &lt;unsignnumber&gt;.</i> </p>
      <p> Order of definition of operators sets defines the operators priority. In this example, 
      operator <i>&#94;</i> has a higher than <i>*</i> and <i>/</i>. Operator in the same set have the same priority. Also, the first component , in this case <i>&lt;number&gt;</i>, indicates the component for the first element in the expression (for example if it can have associated a minus character), while the second component, in this case <i>&lt;unsignnumber&gt;</i>, indicates the component for the rest of the expression.
 
