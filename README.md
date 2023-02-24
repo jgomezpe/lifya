@@ -30,7 +30,7 @@ Language processing for the numtseng infrastructure.
 <h3>Grammar</h3>
      <p>Creates a parser from an string with a lifya language specification. Lifya language specification
      is a specification mechanism defined as follows:</p>
-     <h4>Rule and lexemes ids</43>
+     <h4>Rule and lexemes ids</h4>
      Rules and token recognizers ids have the following form: <i>&lt;%?\w+&gt;</i>, i.e. a sequence of
      alphabetic characters quoted by &lt; and &gt; characters. The initial character <i>%</i> indicates to the 
      tokenizer that such token recognizer is removable.
@@ -85,13 +85,13 @@ Language processing for the numtseng infrastructure.
      <li> <i>?</i> : zero or one times the previous set of characters. For example, <i>doom?</i> indicates 
      zero or one times the word <i>doom</i> not just the character <i>m</i> </li>
      <li> <i>Range</i>: Produces the set of characters between two characters (both limits included). For example,
-     <i>A-F</i> Produces the set of characters <i>A,B,C,D,E,F</i>
+     <i>A-F</i> Produces the set of characters <i>A,B,C,D,E,F</i></li>
      <li> <i>set</i>: Produces the set of character defined by the considered elements. For example, <i>[\d|A-F|a-f]</i> indicates a character that is a hexadecimal character. Elements in the set are separated by pipe characters (|) and each one may be a single character, escaped character, or a category character.</li>
      <li> <i>-</i> : Produces the complement of the associated set. For example <i>-[\d|A-F|a-f]</i> indicates
-     a character that is not a hexadecimal character</li>
-     <li> <i>words</i> : Produces a collection of optional word sequences. For example, <i>{false|true|null}</i> produces an optional rule defined by words <i>false</i>, <i>true</i>, and <i>null</i></li>
-     <li> <i>|</i>: Produces a collection of optional expressions. For example, <i>\d+ | [A-F]+</i> produces an optional matching of sequences of digits (<i>\d+</i>) or sequences of letters <i>A,B,C,D,E,F</i>    
-     <li> <i>()</i>: Are used for grouping expressions</li>    
+     a character that is not a hexadecimal character.</li>
+     <li> <i>words</i> : Produces a collection of optional word sequences. For example, <i>{false|true|null}</i> produces an optional rule defined by words <i>false</i>, <i>true</i>, and <i>null</i></li>.
+     <li> <i>|</i>: Produces a collection of optional expressions. For example, <i>\d+ | [A-F]+</i> produces an optional matching of sequences of digits (<i>\d+</i>) or sequences of letters <i>A,B,C,D,E,F</i>.</li>
+     <li> <i>()</i>: Are used for grouping expressions.</li>    
      </ul>
      <p> A token recognizer is defined as <i>&lt;id&gt; = expression</i>. For example, 
      a lifya expression for real numbers can be defined as follows: </p>
@@ -105,13 +105,13 @@ Language processing for the numtseng infrastructure.
      <h5>Conventional Rules</h5>
      <p>Defined in a similar fashion to the token recognizers, but including rule and token recognizer ids.
      <ul>
-     <li> <i>*</i> : zero or more times the component. For example, <i>doom*</i> and <i>&lt;number&gt;*</i>indicates zero or more times the word <i>doom</i> and zero or more times the component (rule or token recognizer) <i>&lt;number&gt;</i>, respectively</li>
-     <li> <i>+</i> : one or more times the component. For example, <i>doom+</i> and <i>&lt;number&gt;+</i>indicates one or more times the word <i>doom</i> and one or more times the component (rule or token recognizer) <i>&lt;number&gt;</i>, respectively</li>
-     <li> <i>?</i> : zero or one times the component. For example, <i>doom?</i> and <i>&lt;number&gt;?</i>indicates zero or one times the word <i>doom</i> and zero or one times the component (rule or token recognizer) <i>&lt;number&gt;</i>, respectively</li>
+     <li> <i>*</i> : zero or more times the component. For example, <i>doom*</i> and <i>&lt;number&gt;*</i> indicates zero or more times the word <i>doom</i> and zero or more times the component (rule or token recognizer) <i>&lt;number&gt;</i>, respectively.</li>
+     <li> <i>+</i> : one or more times the component. For example, <i>doom+</i> and <i>&lt;number&gt;+</i> indicates one or more times the word <i>doom</i> and one or more times the component (rule or token recognizer) <i>&lt;number&gt;</i>, respectively.</li>
+     <li> <i>?</i> : zero or one times the component. For example, <i>doom?</i> and <i>&lt;number&gt;?</i> indicates zero or one times the word <i>doom</i> and zero or one times the component (rule or token recognizer) <i>&lt;number&gt;</i>, respectively.</li>
      <li> <i>|</i>: Produces a collection of optional expressions. For example, <i>doom+ | &lt;number&gt;+</i> produces an optional matching of sequences of the word (<i>\doom</i>) or sequences of <i>&lt;number&gt;</i>
-     <li> <i>()</i>: Are used for grouping expressions</li>   
+     <li> <i>()</i>: Are used for grouping expressions.</li>   
      </ul> 
-     <p>Conventional rules are defined as <i>&lt;id&gt; = regular_body.</i>. For example, a rule for list of
+     <p>Conventional rules are defined as <i>&lt;id&gt; = regular_body</i>. For example, a rule for list of
      numbers separated by commas may be defined as follows:</p>
      <p> <i>&lt;list&gt; :- &lt;list&gt; (, &lt;list&gt;)*</i> </p>
      <h5>Expression Rules</h5>
