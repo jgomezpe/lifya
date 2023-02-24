@@ -89,7 +89,7 @@ Language processing for the numtseng infrastructure.
      <li> <i>set</i>: Produces the set of character defined by the considered elements. For example, <i>[\d|A-F|a-f]</i> indicates a character that is a hexadecimal character. Elements in the set are separated by pipe characters (|) and each one may be a single character, escaped character, or a category character.</li>
      <li> <i>-</i> : Produces the complement of the associated set. For example <i>-[\d|A-F|a-f]</i> indicates
      a character that is not a hexadecimal character.</li>
-     <li> <i>words</i> : Produces a collection of optional word sequences. For example, <i>{false|true|null}</i> produces an optional rule defined by words <i>false</i>, <i>true</i>, and <i>null</i></li>.
+     <li> <i>words</i> : Produces a collection of optional word sequences. For example, <i>{false|true|null}</i> produces an optional rule defined by words <i>false</i>, <i>true</i>, and <i>null</i>.</li>
      <li> <i>|</i>: Produces a collection of optional expressions. For example, <i>\d+ | [A-F]+</i> produces an optional matching of sequences of digits (<i>\d+</i>) or sequences of letters <i>A,B,C,D,E,F</i>.</li>
      <li> <i>()</i>: Are used for grouping expressions.</li>    
      </ul>
