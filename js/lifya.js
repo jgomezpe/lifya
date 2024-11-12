@@ -2811,6 +2811,29 @@ class ProcessDerivationTreeClass {
         } 
         return t
     }
+
+
+    apply(t, opers){
+        for(var i=0; i<opers.length; i++){
+           switch( opers[i][0] ){
+               case 'LAMBDA': t = ProcessDerivationTreeClass.eliminate_lambda(t); break;
+               case 'DEL':
+                 if(opers[i].length == 2) opers.push(null)
+                   t = ProcessDerivationTreeClass.eliminate_token( t, opers[1], opers[2] )
+               break; 
+               case 'REDUCE':
+                 if(opers[i].length == 1)
+                   t = ProcessDerivationTreeClass.reduce_size_1( t )
+                 else
+                   t = ProcessDerivationTreeClass.reduce_exp( t, opers[1] )
+               break; 
+               case 'REPLACE':
+                 t = ProcessDerivationTreeClass.replace( t, opers[1], opers[2] )
+               break;
+           } 
+        }
+        return t;
+    }
 }
 
 /**
@@ -2969,3 +2992,39 @@ class ArrayStringifier {
     }    
 }
 
+function generate_parser( rule, language, tree_process, name = 'NonameLanguage' ){
+    var lines = language.split('\n')
+    language = ''
+    for(var i=0; i<lines.length; i++){   
+      if(lines[i].length > 0 )
+        language += '    ' + lines[i] + \\ \n'
+    }
+    var tp = tree_process.split('\n') 
+    sep =  ''
+    tree_process = '[' 
+    for(var i=0; i<tp.length; i++){
+      if(tp.length>0){
+        tree_process += sep + '['+ tp[i] + ']' 
+        sep = ','
+      }
+    tree_process += ']'
+    var code = 
+      'class ' + name + ' extends Language{ \n' +
+      '  static lang = \' \\ \n' +
+      language + '  \' \n' +
+      '  static init() { return ParserGenerator.parser(this.parser,'+rule+') }\n'  +
+      '  constructor() { super('+name+'.init()) }\n' +
+      '  process(t){ //@TODO: Process the derivation tree here }\n' +
+      '  mean(t){\n' +
+      '    t = ProcessDerivationTree.apply(' + tree_process + ')\n' +
+      '    var obj = this.process(t)\n' +
+      '    t.value = obj\n' +
+      '    return t\n' +
+      '  }\n' +
+      '  apply(input){\n'+
+      '    var parser = new ' + name + '()\n' +
+      '    return parser.get(new Source("noname",input))\n' +
+      '  }\n' +       
+      '}'
+    return code 
+}
