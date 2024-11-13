@@ -11,13 +11,6 @@ Language processing for the numtseng infrastructure.
 
 &nbsp;All rights reserved.
 
-<h3>Java</h3>
-
-&nbsp;Ready to use: <A HREF="https://github.com/jgomezpe/libs/lifya.jar">https://github.com/jgomezpe/libs/lifya.jar</A>
-
-&nbsp;API documentation: <A HREF="https://numtseng.com/api/lifya/java/">https://numtseng.com/api/lifya/java/</A>
-
-&nbsp;Compilation requires kompari.jar available at <A HREF="https://github.com/jgomezpe/libs/">https://github.com/jgomezpe/libs/</A>
 
 <h3>JavaScript</h3>
 
