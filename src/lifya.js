@@ -2813,6 +2813,15 @@ class ProcessDerivationTreeClass {
     }
 
     apply(t, opers){
+        if(typeof opers === 'string'){
+            opers = []
+            var op = opers.split('\n')
+            for(var i=0; i<op.length; i++){
+                op[i] = op[i].trim()
+                if( op[i].length > 0 )
+                    opers.push(op[i].split(','))
+            }        
+        }
         for(var i=0; i<opers.length; i++){
            switch( opers[i][0] ){
                case 'LAMBDA': t = ProcessDerivationTree.eliminate_lambda(t); break;
