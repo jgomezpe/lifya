@@ -1,5 +1,5 @@
 # lifya
-Language processing for the numtseng infrastructure. 
+Language processing for the numtseng infrastructure. Written in Javascript (and Java). 
 
 &nbsp;Source code: <A HREF="https://github.com/jgomezpe/lifya/">https://github.com/jgomezpe/lifya/</A>
 
@@ -12,11 +12,9 @@ Language processing for the numtseng infrastructure.
 &nbsp;All rights reserved.
 
 
-<h3>JavaScript</h3>
+&nbsp;Ready to use: <A HREF="https://jgomezpe.github.io/lifya/src/lifya.js">https://jgomezpe.github.io/lifya/src/lifya.js</A>
 
-&nbsp;Ready to use: <A HREF="https://numtseng.com/modules/lifya.js">https://numtseng.com/modules/lifya.js</A>
-
-&nbsp;Requires kompari.js available at <A HREF="https://numtseng.com/modules/">https://numtseng.com/modules/</A>
+&nbsp;Requires kompari.js available at <A HREF="https://jgomezpe.github.io/kompari/src/kompari.js">https://jgomezpe.github.io/kompari/src/kompari.js</A>
 
 &nbsp;API documentation: <A HREF="https://numtseng.com/api/lifya/js/">https://numtseng.com/api/lifya/js/</A>
 
