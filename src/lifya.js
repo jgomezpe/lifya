@@ -1150,7 +1150,7 @@ class GenericTokenizer extends Tokenizer{
         }else {
             if(error.length>0) {
                 current = error[0]
-                for( var i=1; i<error.size(); i++ ) {
+                for( var i=1; i<error.length; i++ ) {
                     var e2 = error[i]
                     if(e2.length()>current.length()) current = e2
                 }
