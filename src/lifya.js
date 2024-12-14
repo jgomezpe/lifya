@@ -1143,7 +1143,7 @@ class GenericTokenizer extends Tokenizer{
             for( var i=1; i<opt.length; i++ ) {
                 var e2 = opt[i]
                 if( e2.length()>current.length() ||
-                    (e2.length()==current.length() && priority[e2.type]<priority[current.type]) )
+                    (e2.length()==current.length() && this.priority[e2.type]<this.priority[current.type]) )
                     current = e2
             }
            
